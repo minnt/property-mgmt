@@ -1,0 +1,298 @@
+@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
+
+:root {
+  --color-dark: #202B33;
+  --color-light: rgb(252, 252, 252);
+
+  --accent: rgba(150, 156, 187, 0.10);
+  --accent2: rgba(150, 156, 187, 0.06);
+}
+
+.lightmode {
+  background-color: var(--color-light);
+}
+
+.darkmode {
+  background-color: var(--color-dark);
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  font-family: "Lato", sans-serif;
+  background: linear-gradient(45deg, rgb(80, 125, 221), rgb(235, 203, 241));
+}
+
+.container-inline {
+  display: inline-flex;
+  width: 100%;
+}
+
+.bar {
+  width: 120px;
+  background-color: var(--accent);
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 30px 10px;
+  align-items: center;
+}
+
+.container {
+  margin: 50px auto;
+  width: 60%;
+  height: 100%;
+  border-radius: 3px;
+  padding: 0px;
+  border-top-left-radius: 11px;
+  border-bottom-left-radius: 11px;
+  display: inline-flex;
+}
+
+.content {
+  width: 100%;
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  height: 1000px;
+}
+
+.content-inner {
+  display: flex;
+}
+
+.main {
+  flex: 2;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 900px;
+  padding: 5px;
+}
+
+.aside {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.dialog {
+  padding: 30px;
+  width: 400px;
+  height: 325px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.address {
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.info-pane {
+  background-color: var(--accent);
+  border-radius: 3px;
+  line-height: 1.5rem;
+}
+
+.info-inner {
+  padding: 20px;
+}
+
+.info-img {
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  height: 180px;
+}
+
+.flex-sb {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ac {
+  align-items: center;
+}
+
+.al {
+  align-items: initial;
+}
+
+.height100 {
+  height: 100%;
+}
+
+.width100 {
+  width: 100%;
+}
+
+.width80 {
+  width: 80%;
+}
+
+.balance {
+  font-size: 15px;
+  margin: 0;
+}
+
+.title {
+  font-size: 20px;
+}
+
+.subtitle {
+  font-size: 14px;
+}
+
+hr {
+  border-top: 1px solid lightgray;
+  border-bottom: 0px;
+  margin-bottom: 20px;
+}
+
+.pad-5 {
+  padding: 0px 5px;
+}
+
+.padr-5 {
+  padding-right: 5px;
+}
+
+.f-1 {
+  flex: 1;
+}
+
+.f-2 {
+  flex: 2;
+}
+
+.f-3 {
+  flex: 3;
+}
+
+.f-4 {
+  flex: 4;
+}
+
+/* Delete one of these */
+.mt10 {
+  margin-top: 10px;
+}
+
+.mt20 {
+  margin-top: 20px;
+}
+
+.w250px {
+  width: 250px;
+}
+
+.mr-5 {
+  margin-right: 5px;
+}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+/* Delete one of these */
+.mt-10 {
+  margin-top: 10px;
+}
+
+.width50 {
+  width: 50%;
+}
+
+.width25 {
+  width: 25%;
+  background-color: var(--accent2);
+}
+
+.h20 {
+  height: 20px;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.heading {
+  text-transform: uppercase;
+  letter-spacing: 0.4rem;
+  font-size: 14px;
+}
+
+/* Tree fix links */
+.bp3-tree-node-label > a {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+.bar > a {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+.width500px {
+  width: 500px;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.mega-text {
+  width: 100%;
+  font-size: 30px;
+  /* color: rgb(170, 175, 248); */
+  margin-top: 30px;
+}
+
+.super-text {
+  width: 100%;
+  font-size: 22px;
+  /* color: rgb(170, 175, 248); */
+  margin: 70px;
+}
+
+
+/* SCROLLBAR */
+/* Width */
+.main::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+/* .main::-webkit-scrollbar-track {
+} */
+
+/* Handle */
+.main::-webkit-scrollbar-thumb {
+  background: rgba(150, 156, 187, 0.10);
+  border-radius: 6px;
+  /* border: 3px solid #f1f1f1; */
+}
+
+/* Handle on hover */
+.main::-webkit-scrollbar-thumb:hover {
+  background: rgba(150, 156, 187, 0.20);
+}
