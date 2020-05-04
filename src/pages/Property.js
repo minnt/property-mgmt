@@ -1,11 +1,10 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {Link, useParams} from 'react-router-dom'
-
+import axios from 'axios'
 import {Button, Icon, Tooltip, ProgressBar} from "@blueprintjs/core"
 
 import data from '../data/propertiesData'
 import LineChart from '../components/LineChart'
-
 import image from '../img/house2.jpg'
 
 function PropertyOverview() {
@@ -13,8 +12,18 @@ function PropertyOverview() {
   let { propertyNo } = useParams()
 
   // const [isEditing, setIsEditing] = useState(false)
+  // const [test, setTest] = useState('')
 
   const property = data.residential[propertyNo]
+
+  useEffect(() => {
+    axios.get('http://localhost:5000/countries/')
+      .then(res => {
+        console.log(res)
+        console.log('poop')
+      })
+      .catch(err => console.log(err))
+  }, [])
 
   // function view() {
   //   return (
