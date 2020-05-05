@@ -1,0 +1,153 @@
+[
+  {
+    "name": "Shady Oaks",
+    "type": "Residential",
+    "favorite": false,
+    "street": "555 Shady Dr",
+    "city": "Huntington",
+    "state": "WV",
+    "zip": 25701,
+    "image": "",
+    "events": [
+      {"date": "June 3 2009", "info": "Acquired"},
+      {"date": "August 19 2020", "info": "Maintenance to unit 6: bees"}
+    ],
+    "utilites": {
+      "power": "AEP",
+      "water": "American Water",
+      "gas": "Strickland",
+      "waste": "Rumpke",
+      "internet": "Comcast",
+      "sewage": "Huntington Sewage",
+      "lawncare": "Lawns by Bill"
+    },
+    "notes": ["Needs lawncare"],
+    "units": [
+      {
+        "unitNumber": 1,
+        "sqFt": 2000,
+        "rent": 800,
+        "bedrooms": 2,
+        "bathrooms": 2,
+        "pets": false,
+        "keys": 2,
+        "tenants": [
+          {"name": "Hank Hill",   "contact": "304-555-0123", "incidents": [], "docs": []},
+          {"name": "Peggy Hill",  "contact": "304-555-1234", "incidents": [], "docs": []}
+        ],
+        "events": []
+      },
+      {
+        "unitNumber": 2,
+        "sqFt": 2000,
+        "rent": 800,
+        "bedrooms": 2,
+        "bathrooms": 2,
+        "pets": false,
+        "keys": 2,
+        "tenants": [
+          {"name": "Dale Gribble",        "contact": "304-555-0123", "incidents": [], "docs": []},
+          {"name": "Nancy Hicks-Gribble", "contact": "304-555-1234", "incidents": [], "docs": []}
+        ],
+        "events": []
+      }
+    ]
+  },
+  {
+    "name": "Boardwalk",
+    "type": "Residential",
+    "favorite": false,
+    "street": "1010 Monopoly St",
+    "city": "Beverly Hills",
+    "state": "CA",
+    "zip": 90210,
+    "image": "",
+    "events": [
+      {"date": "May 7 2011", "info": "Acquired"}
+    ],
+    "utilites": {
+      "power": "Blackwell Power",
+      "water": "Pacific Water",
+      "gas": "Strickland",
+      "waste": "AW",
+      "internet": "Frontier",
+      "sewage": "Cali Co",
+      "lawncare": "The Hills Lawncare"
+    },
+    "notes": ["Rent to be raised Jan 2021"],
+    "units": [
+      {
+        "unitNumber": 1,
+        "sqFt": 5000,
+        "rent": 3000,
+        "bedrooms": 3,
+        "bathrooms": 2,
+        "pets": true,
+        "keys": 1,
+        "tenants": [
+          {"name": "Boomhauer", "contact": "304-555-4567", "incidents": [], "docs": []}
+        ],
+        "events": []
+      },
+      {
+        "unitNumber": 2,
+        "sqFt": 5500,
+        "rent": 3200,
+        "bedrooms": 2,
+        "bathrooms": 2,
+        "pets": false,
+        "keys": 2,
+        "tenants": [
+          {"name": "John Redcorn", "contact": "304-555-5678", "incidents": [], "docs": []}
+        ],
+        "events": []
+      }
+    ]
+  },
+  {
+    "name": "Park Place",
+    "type": "Residential",
+    "favorite": false,
+    "street": "420 Willow Ln",
+    "city": "Ashland",
+    "state": "KY",
+    "zip": 41101,
+    "image": "",
+    "events": [
+      {"date": "May 7 2011", "info": "Acquired"},
+      {"date": "September 20 2020", "info": "New HVAC unit installation"}
+    ],
+    "utilites": {
+      "power": "Bluegrass Power",
+      "water": "Kentucky Water",
+      "gas": "Thaterton Fuels",
+      "waste": "Waste Management",
+      "internet": "Suddenlink",
+      "sewage": "Ashland Sewage",
+      "lawncare": "Jones Lawncare"
+    },
+    "notes": [],
+    "units": [
+      {
+        "unitNumber": 1,
+        "sqFt": 1000,
+        "rent": 500,
+        "bedrooms": 1,
+        "bathrooms": 1,
+        "pets": true,
+        "keys": 1,
+        "tenants": [
+          {
+            "name": "Bill Douterive",
+            "contact": "304-555-5678",
+            "incidents": [
+              {"date": "June 3 2019", "info": "Late on rent by 1 week"}
+            ],
+            "docs": []
+          }
+        ],
+        "events": []
+      }
+    ]
+  }
+]

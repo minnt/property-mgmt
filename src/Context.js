@@ -1,4 +1,5 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
+import axios from 'axios'
 
 import pData from './data/propertiesData'
 // import zData from './data/propertiesDataZ'
@@ -10,12 +11,17 @@ function ContextProvider({children}) {
 
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [propertiesData, setPropertiesData] = useState(pData)
+  const [propertiesData2, setPropertiesData2] = useState([])
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setPropertiesData(zData)
-  //   }, 3000)
-  // }, [])
+  useEffect(() => {
+    axios.get('http://localhost:5000/residential/')
+    .then(res => {
+      console.log(res)
+      console.log(res.data.data[0])
+      setPropertiesData2(res.data.data)
+    })
+    .catch(err => console.log(err))
+  }, [])
 
   function toggleDarkMode() {
     setIsDarkMode(!isDarkMode)

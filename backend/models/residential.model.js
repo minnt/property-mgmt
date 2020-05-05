@@ -1,17 +1,18 @@
 const mongoose = require('mongoose')
 
-const Property = new mongoose.Schema({
+const Residential = new mongoose.Schema({
   name:       {type: String,  default: ''},
+  type:       {type: String,  default: ''},  // Necessary?
   favorite:   {type: Boolean, default: false},
   street:     {type: String,  default: ''},
   city:       {type: String,  default: ''},
   state:      {type: String,  default: ''},
   zip:        {type: Number,  default: 0},
-  image:      {type: String,  default: ''},
+  image:      {type: String,  default: ''},  // URL
   events:     {type: Array,   default: []},
-  utilities:  {type: Array,   default: []},
+  utilities:  {type: Object,  default: {}},
   notes:      {type: Array,   default: []},
   units:      {type: Array,   default: []}
 })
 
-module.exports = mongoose.model('Property', Property)
+module.exports = mongoose.model('Residential', Residential, 'residential')  // 3rd parameter is collection name
