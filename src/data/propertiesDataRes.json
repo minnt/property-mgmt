@@ -12,7 +12,7 @@
       {"date": "June 3 2009", "info": "Acquired"},
       {"date": "August 19 2020", "info": "Maintenance to unit 6: bees"}
     ],
-    "utilites": {
+    "utilities": {
       "power": "AEP",
       "water": "American Water",
       "gas": "Strickland",
@@ -65,7 +65,7 @@
     "events": [
       {"date": "May 7 2011", "info": "Acquired"}
     ],
-    "utilites": {
+    "utilities": {
       "power": "Blackwell Power",
       "water": "Pacific Water",
       "gas": "Strickland",
@@ -117,7 +117,7 @@
       {"date": "May 7 2011", "info": "Acquired"},
       {"date": "September 20 2020", "info": "New HVAC unit installation"}
     ],
-    "utilites": {
+    "utilities": {
       "power": "Bluegrass Power",
       "water": "Kentucky Water",
       "gas": "Thaterton Fuels",

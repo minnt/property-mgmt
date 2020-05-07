@@ -1,24 +1,19 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 
-import pData from './data/propertiesData'
-// import zData from './data/propertiesDataZ'
-
 const Context = React.createContext()
-
 
 function ContextProvider({children}) {
 
   const [isDarkMode, setIsDarkMode] = useState(false)
-  const [propertiesData, setPropertiesData] = useState(pData)
-  const [propertiesData2, setPropertiesData2] = useState([])
+  const [propertiesData, setPropertiesData] = useState([])
 
+  // Load properties data
   useEffect(() => {
     axios.get('http://localhost:5000/residential/')
     .then(res => {
-      console.log(res)
-      console.log(res.data.data[0])
-      setPropertiesData2(res.data.data)
+      console.log('Updating properties data')
+      setPropertiesData(res.data.data)
     })
     .catch(err => console.log(err))
   }, [])
@@ -27,24 +22,29 @@ function ContextProvider({children}) {
     setIsDarkMode(!isDarkMode)
   }
 
-  const addProperty = (data) => {
+  // Create a new property document in the database
+  function addProperty(data) {
     // Info passed in: name, noOfUnits, address(street, city, state, zip), images
-    const newData = {
-      id: propertiesData.residential.length,
-      name: data.propertyName,
-      addrLineOne: data.propertyStreet,
-      addrLineTwo: `${data.propertyCity}, ${data.propertyState} ${data.propertyZip}`,
-      unitsAmount: data.propertyNoOfUnits,
-      units: []
-    }
+    // const newData = {
+    //   name: data.propertyName,
+    //   street: data.propertyStreet,
+    //   city: data.city,
+    //   state: data.state,
+    //   zip: data.zip,
 
-    var newState = {commercial: [], residential: []}
-    // var newState = {}
-    // newState = propertiesData
-    newState.residential = propertiesData.residential
-    newState.residential.push(newData)
+    //   addrLineTwo: `${data.propertyCity}, ${data.propertyState} ${data.propertyZip}`,
+    //   units: []
+    // }
 
-    setPropertiesData(newState)
+    // Create new object so that it doesn't reference the same memory as propertiesData, thus being equal
+    // var newState = {commercial: [], residential: []}
+    // newState.residential = propertiesData
+    // newState.residential.push(newData)
+
+    //setPropertiesData(newState)
+
+    axios.post('http://localhost:5000/residential/add', data)
+      .then(res => console.log(res.data))  
   }
 
 

@@ -13,7 +13,7 @@ function TreeNav() {
 
   useEffect(() => {
     setNodes(generateMenu(propertiesData))
-    console.log('UPDATE! Properties data has updated')
+    console.log('UPDATE! Properties data has updated, updating tree')
   }, [propertiesData])
 
   // Tree nav basic functions
@@ -115,7 +115,7 @@ function TreeNav() {
     )
 
     // Property names
-    pData.residential.forEach((property, index1) => {
+    pData.forEach((property, index1) => {
 
       treeNodes[0].childNodes[1].childNodes.push(
         {
@@ -131,7 +131,7 @@ function TreeNav() {
       )
 
       // Unit numbers
-      pData.residential[index1].units.forEach((unit, index2) => {
+      pData[index1].units.forEach((unit, index2) => {
         treeNodes[0].childNodes[1].childNodes[index1].childNodes.push(
           {
             id: index2,

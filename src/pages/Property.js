@@ -1,19 +1,21 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import {Link, useParams} from 'react-router-dom'
-import {Button, Icon, Tooltip, ProgressBar} from "@blueprintjs/core"
+import {Button, HTMLTable} from "@blueprintjs/core"
 
-import data from '../data/propertiesData'
+import {Context} from '../Context'
 import LineChart from '../components/LineChart'
 import image from '../img/house2.jpg'
 
 function PropertyOverview() {
 
   let { propertyNo } = useParams()
+  const { propertiesData } = useContext(Context)
 
   // const [isEditing, setIsEditing] = useState(false)
   // const [test, setTest] = useState('')
 
-  const property = data.residential[propertyNo]
+  const property = propertiesData[propertyNo]
+  console.log(property)
 
   // function view() {
   //   return (
@@ -54,28 +56,17 @@ function PropertyOverview() {
 
           <div className="flex-sb">
             <p className="address">
-              {property.addrLineOne}<br />
-              {property.addrLineTwo}<br />
+              {property.street}<br />
+              {`${property.city}, ${property.state} ${property.zip}`}<br />
               <Button className="mt10" icon="map" text="View on map" />
             </p>
-          </div>
-          
-          <div className="flex-sb mt20">
-            <div>
-              <h1 className="heading">Mortgage</h1><p></p>
-              <p>
-                Contract: $850,000 over 10 years, 3.55% APR<br />
-                $411,513 remaining<br />
-                Next payment: $3500 due on May 1st. [<Link to="#">Mark as paid</Link>]
-              </p>
-              <ProgressBar animate={false} stripes={true} value={0.47} intent="success"/>
-            </div>
           </div>
 
           <div className="flex-sb mt20">
             <div>
               <h1 className="heading">Utilities</h1>
               {
+                // Need a way to check for empty objects
                 property.utilities ?
                   <ul>
                     <li>Power:    <i>{property.utilities.power}</i></li>
@@ -87,53 +78,68 @@ function PropertyOverview() {
                     <li>Lawncare: <i>{property.utilities.lawncare}</i></li>
                   </ul>
                 :
-                  <>No utilities information submitted.</>
+                  <>No utilities information submitted</>
               }
             </div>
           </div>
 
           <div className="flex-sb mt20">
             <div>
-              <h1 className="heading">Upcoming events</h1>
-              <p>
-                <Tooltip content="Important">
-                  <Icon icon="warning-sign" iconSize={16} intent="danger" />
-                </Tooltip>
-                &nbsp;&nbsp;3-30-20: Maintenance to unit 6 - bees
-              </p>
+              <h1 className="heading">Events</h1>
+              <HTMLTable className="width100" bordered={true} striped={true} condensed={true}>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Event Info</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    // DATE AS ID, FIX
+                    property.events.map(item => {
+                      return (
+                        <tr key={item.date}>
+                          <td>{item.date}</td>
+                          <td>{item.info}</td>
+                        </tr>
+                      )
+                    })
+                  }
+                </tbody>
+              </HTMLTable>
             </div>
           </div>
 
+          
           <div className="flex-sb mt20">
             <div>
-              <h1 className="heading">History</h1>
-              <p>
-                New tenant in unit 18 - <Link to="#">View tenant</Link><br />
-                [<Link to="#">View complete history</Link>]
-              </p>
+              <h1 className="heading">Stats</h1>
+              <LineChart />
             </div>
           </div>
-
-          <LineChart />
 
           <div className="flex-sb mt20">
             <div>
               <h1 className="heading">Notes</h1>
-              <p>
-                No notes
-              </p>
-            </div>
-          </div>
-
-          <div className="flex-sb mt20">
-            <div>
-              <h1 className="heading">Test</h1>
-              <p>
-                Test test test test test test test<br />
-                Test test test test test test test<br />
-                Test test test test test test test<br />
-                Test test test test test test test<br />
-              </p>
+                {
+                  property.notes.length > 0 ?
+                    <HTMLTable className="width100" bordered={true} striped={true} condensed={true}>
+                      <tbody>
+                        {
+                          // NOTE AS ID, FIX
+                          property.notes.map(item => {
+                            return (
+                              <tr key={item}>
+                                <td>{item}</td>
+                              </tr>
+                            )
+                          })
+                        }
+                      </tbody>
+                  </HTMLTable>
+                :
+                  <>No notes</>
+              }
             </div>
           </div>
 
@@ -145,14 +151,11 @@ function PropertyOverview() {
             <div className="info-inner">
               <h1 className="heading">Info</h1>
               <p>
-                {property.unitsAmount} total units ({property.unitsVacant} vacant)<br />
+                {property.units.length} units<br />
                 [<Link to="#">View tenant list</Link>]<br />
                 15,000 square feet<br />
-                Acquired: 3 June, 2009<br />
                 Rent is $500 to $1300 per month<br />
-                Expected income: $16,800<br />
-                Expense: $11,000<br />
-                Approx. profit: <b>$5,800</b><br />
+                Income: $16,800<br />
               </p>
             </div>
           </div>

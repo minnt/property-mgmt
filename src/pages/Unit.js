@@ -1,20 +1,19 @@
-import React, {useState} from 'react'
-import {Link, useParams} from 'react-router-dom'
-
+import React, {useState, useContext} from 'react'
+import {useParams} from 'react-router-dom'
 import {Button, HTMLTable, InputGroup, NumericInput, TextArea, FileInput, Checkbox} from "@blueprintjs/core"
 // import {DatePicker} from "@blueprintjs/datetime"
 
-import data from '../data/propertiesData'
+import {Context} from '../Context'
 
 function Unit() {
 
   let { propertyNo, unitNo } = useParams()
+  const { propertiesData } = useContext(Context)
 
   const [isEditing, setIsEditing] = useState(false)
 
-  const property = data.residential[propertyNo]
-  const unit = data.residential[propertyNo].units[unitNo]
-
+  const property = propertiesData[propertyNo]
+  const unit = propertiesData[propertyNo].units[unitNo]
 
   return (
     <div className="content">
@@ -143,9 +142,10 @@ function Edit() {
 function View() {
 
   let { unitNo, propertyNo } = useParams()
+  const { propertiesData } = useContext(Context)
   
-  const property = data.residential[propertyNo]
-  const unit = data.residential[propertyNo].units[unitNo]
+  const property = propertiesData[propertyNo]
+  const unit = propertiesData[propertyNo].units[unitNo]
 
   return (
     <div className="content-inner">
@@ -154,69 +154,71 @@ function View() {
 
         <div className="flex-sb">
           <p className="address">
-            {unit.addrLineOne}<br />
-            {unit.addrLineTwo}<br />
+            {`${property.street} Apt ${unit.unitNumber}`}<br />
+            {`${property.city}, ${property.state} ${property.zip}`}<br />
             <Button className="mt10" icon="map" text="View on map" />
           </p>
-        </div>
-
-        <div className="flex-sb mt20">
-          <div>
-            <h1 className="heading">Maintenance Scheduled</h1>
-            <p>
-              None
-            </p>
-          </div>
         </div>
           
         <div className="flex-sb mt20">
           <div>
-            <h1 className="heading">Maintenance History</h1><p></p>
-
-            <HTMLTable className="width100" bordered={true} striped={true} condensed={true}>
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Description</th>
-                  <th>Technician</th>
-                  <th>Issue Resolved?</th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  // DATE AS ID, FIX
-                  unit.maintenanceHistory.map(item => {
-                    return (
-                      <tr key={item.date}>
-                        <td>{item.date}</td>
-                        <td>{item.issue}</td>
-                        <td>{item.technician}</td>
-                        <td>{item.resolved}</td>
-                      </tr>
-                    )
-                  })
-                }
-              </tbody>
-            </HTMLTable>
+            <h1 className="heading">Events</h1><p></p>
+            {
+              unit.events.length > 0 ?
+                <HTMLTable className="width100" bordered={true} striped={true} condensed={true}>
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Event Info</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {
+                      // EVENT AS ID, FIX
+                      unit.events.map(item => {
+                        return (
+                          <tr key={item}>
+                            <td>{item}</td>
+                          </tr>
+                        )
+                      })
+                    }
+                  </tbody>
+                </HTMLTable>
+              :
+                <>No events</>
+            }
           </div>
         </div>
 
         <div className="flex-sb mt20">
           <div>
-            <h1 className="heading">Utilities</h1>
+            <h1 className="heading">Tenants</h1><p></p>
             {
-              property.utilities ?
-                <ul>
-                  <li>Power:    <i>{property.utilities.power}</i></li>
-                  <li>Gas:      <i>{property.utilities.gas}</i></li>
-                  <li>Water:    <i>{property.utilities.water}</i></li>
-                  <li>Sewage:   <i>{property.utilities.sewage}</i></li>
-                  <li>Garbage:  <i>{property.utilities.waste}</i></li>
-                  <li>Internet: <i>{property.utilities.internet}</i></li>
-                  <li>Lawncare: <i>{property.utilities.lawncare}</i></li>
-                </ul>
+              unit.tenants.length > 0 ?
+                <HTMLTable className="width100" bordered={true} striped={true} condensed={true}>
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Contact</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {
+                      // EVENT AS ID, FIX
+                      unit.tenants.map(item => {
+                        return (
+                          <tr key={item.name}>
+                            <td>{item.name}</td>
+                            <td>{item.contact}</td>
+                          </tr>
+                        )
+                      })
+                    }
+                  </tbody>
+                </HTMLTable>
               :
-                <>No utilities information submitted.</>
+                <>No tenants</>
             }
           </div>
         </div>
@@ -231,15 +233,6 @@ function View() {
           </div>
         </div>
 
-        <div className="flex-sb mt20">
-          <div>
-            <h1 className="heading">Notes</h1>
-            <p>
-              No notes
-            </p>
-          </div>
-        </div>
-
       </div>
 
       <div className="aside">
@@ -250,15 +243,14 @@ function View() {
             <p>
               {unit.bedrooms} bedroom / {unit.bathrooms} bath<br />
               {unit.tenants.length} tenants<br />
-              [<Link to="#">View tenant list</Link>]<br />
               {unit.sqFt} square feet<br />
               Rent is ${unit.rent} per month<br />
               {unit.keys} keys supplied<br />
               {
                 unit.pets ?
-                  "Pets: Yes"
+                  "Pets allowed"
                 :
-                  "Pets: No"
+                  "Pets not allowed"
               }
             </p>
           </div>

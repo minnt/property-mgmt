@@ -8,7 +8,7 @@ import {Context} from '../Context'
 // Component to render a table
 function ViewAll() {
 
-  const {addProperty} = useContext(Context)
+  const {propertiesData, addProperty} = useContext(Context)
 
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
@@ -55,7 +55,6 @@ function ViewAll() {
       <Dialog isOpen={isDialogOpen} canEscapeKeyClose={true} canOutsideClickClose={true}
         isCloseButtonShown={true} title="Add a new property" onClose={() => {setIsDialogOpen(false)}}
         icon="plus">
-        
         <div className="dialog mt20">
           <InputGroup type="text" value={inputData.propertyName} name="propertyName" placeholder="Name of property" onChange={handleChange}/>
           <div className="flex-sb">
@@ -72,58 +71,39 @@ function ViewAll() {
             <Button icon="floppy-disk" text="Save" onClick={() => {addProperty(inputData)}}/>
           </div>
         </div>
-
       </Dialog>
 
       <div className="flex-sb mt20">
-        <HTMLTable className="width100" bordered={true} striped={true} condensed={true}>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th># of Units</th>
-              <th>Type</th>
-              <th>Net Income</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Jongleur Towers</td>
-              <td>100</td>
-              <td><Tag>Commerial</Tag></td>
-              <td>$140,000</td>
-            </tr>
-            <tr>
-              <td>Scranton Park</td>
-              <td>10</td>
-              <td><Tag>Commerial</Tag></td>
-              <td>$5,000</td>
-            </tr>
-            <tr>
-              <td>Park Place</td>
-              <td>5</td>
-              <td><Tag>Commerial</Tag></td>
-              <td>$50,000</td>
-            </tr>
-            <tr>
-              <td>Shady Oaks</td>
-              <td>24</td>
-              <td><Tag intent="primary">Residential</Tag></td>
-              <td>$50,000</td>
-            </tr>
-            <tr>
-              <td>Boardwalk</td>
-              <td>12</td>
-              <td><Tag intent="primary">Residential</Tag></td>
-              <td>$30,000</td>
-            </tr>
-            <tr>
-              <td>Bowerstone Apartments</td>
-              <td>14</td>
-              <td><Tag intent="primary">Residential</Tag></td>
-              <td>$10,000</td>
-            </tr>
-          </tbody>
-        </HTMLTable>
+        {
+          propertiesData.length > 0 ?
+            <HTMLTable className="width100" bordered={true} striped={true} condensed={true}>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th># of Units</th>
+                  <th>City</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  // EVENT AS ID, FIX
+                  propertiesData.map(property => {
+                    return (
+                      <tr key={property.name}>
+                        <td>{property.name}</td>
+                        <td><Tag intent={property.type === "Residential" ? 'primary' : ''}>{property.type}</Tag></td>
+                        <td>{property.units.length}</td>
+                        <td>{property.city}</td>
+                      </tr>
+                    )
+                  })
+                }
+              </tbody>
+            </HTMLTable>
+          :
+            <>No properties</>
+        }
       </div>
 
     </div>

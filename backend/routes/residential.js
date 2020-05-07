@@ -1,5 +1,6 @@
-const express = require('express')
-const router = express.Router()
+// const express = require('express')
+// const router = express.Router()
+const router = require('express').Router()
 const Residential = require('../models/residential.model')
 
 router.get('/', (req, res, next) => {
@@ -18,26 +19,40 @@ router.get('/', (req, res, next) => {
     })
 })
 
-router.get('/add', (req, res, next) => {
-  const details = req.query
-  res.json({
-    confirmation: 'success',
-    data: details
+// router.get('/add', (req, res, next) => {
+//   const details = req.query
+//   res.json({
+//     confirmation: 'success',
+//     data: details
+//   })
+
+//   Residential.create(details)
+//     .then(property => {
+//       res.json({
+//         confirmation: 'success',
+//         data: property
+//       })
+//     })
+//     .catch(err => {
+//       res.json({
+//         confirmation: 'failure',
+//         message: err.message
+//       })
+//     })
+// })
+
+router.route('/add').post((req, res) => {
+  const newProperty = new Residential({
+    name: req.body.name,
+    street: req.body.street,
+    city: req.body.city,
+    state: req.body.state,
+    zip: req.body.zip
   })
 
-  Residential.create(details)
-    .then(property => {
-      res.json({
-        confirmation: 'success',
-        data: property
-      })
-    })
-    .catch(err => {
-      res.json({
-        confirmation: 'failure',
-        message: err.message
-      })
-    })
+  newProperty.save()
+    .then(() => res.json('Property added!'))
+    .catch(err => res.status(400).json('Error: ' + err))
 })
 
 router.get('/update/:id', (req, res, next) => {
