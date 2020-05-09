@@ -1,46 +1,21 @@
-// const express = require('express')
-// const router = express.Router()
 const router = require('express').Router()
 const Residential = require('../models/residential.model')
 
-router.get('/', (req, res, next) => {
+// Get all properties
+router.route('/').get((req, res) => {
   Residential.find()
-    .then(properties => {
-      res.json({
-        confirmation: 'success',
-        data: properties
-      })
-    })
-    .catch(err => {
-      res.json({
-        confirmation: 'failure',
-        message: err.message
-      })
-    })
+    .then(properties => res.json(properties))
+    .catch(err => res.status(400).json('Error: ' + err))
 })
 
-// router.get('/add', (req, res, next) => {
-//   const details = req.query
-//   res.json({
-//     confirmation: 'success',
-//     data: details
-//   })
+// Get one specific property by ID
+router.route('/:id').get((req, res) => {
+  Residential.findById(req.params.id)
+    .then(property => res.json(property))
+    .catch(err => res.status(400).json('Error: ' + err))
+})
 
-//   Residential.create(details)
-//     .then(property => {
-//       res.json({
-//         confirmation: 'success',
-//         data: property
-//       })
-//     })
-//     .catch(err => {
-//       res.json({
-//         confirmation: 'failure',
-//         message: err.message
-//       })
-//     })
-// })
-
+// Add a property
 router.route('/add').post((req, res) => {
   const newProperty = new Residential({
     name: req.body.name,
@@ -55,38 +30,27 @@ router.route('/add').post((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err))
 })
 
-router.get('/update/:id', (req, res, next) => {
-  const updatedDetails = req.query
-  const propertyId = req.params.id
-
-  Residential.findByIdAndUpdate(propertyId, updatedDetails, {new: true})
-    .then(property => {
-      res.json({
-        confirmation: 'success',
-        data: property
-      })
-    })
-    .catch(err => {
-      res.json({
-        confirmation: 'failure',
-        message: err.message
-      })
-    })
+// Delete a property by ID
+router.route('/:id').delete((req, res) => {
+  Residential.findByIdAndDelete(req.params.id)
+    .then(() => res.json('Property deleted.'))
+    .catch(err => res.status(400).json('Error ' + err))
 })
 
-router.get('/:id', (req, res, next) => {
+// Update by ID
+router.route('/update/:id').post((req, res) => {
   Residential.findById(req.params.id)
     .then(property => {
-      res.json({
-        confirmation: 'success',
-        data: property
-      })
-    })
-    .catch(err => {
-      res.json({
-        confirmation: 'fail',
-        message: 'Property not found: ' + req.params.id
-      })
+      property.name = req.body.name
+      property.street = req.body.street
+      property.city = req.body.city
+      property.state = req.body.state
+      property.zip = req.body.zip
+      // { name, street, city, state, zip } = req.body
+
+      property.save()
+        .then(() => res.json('Property updated!'))
+        .catch(err => res.status(400).json('Error: ' + err))
     })
 })
 

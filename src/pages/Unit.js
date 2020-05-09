@@ -15,6 +15,18 @@ function Unit() {
   const property = propertiesData[propertyNo]
   const unit = propertiesData[propertyNo].units[unitNo]
 
+  function view() {
+    return (
+      <></>
+    )
+  }
+
+  function edit() {
+    return (
+      <></>
+    )
+  }
+
   return (
     <div className="content">
       <div className="flex-sb ac">
@@ -64,8 +76,7 @@ function Edit() {
         <div className="flex-sb">
           <div>
             <h1 className="heading">Schedule</h1>
-            <InputGroup leftIcon="timeline-events" value={inputEvents} placeholder="Schedule a new event"
-              onChange={handleInputEvents}/>
+            <InputGroup leftIcon="timeline-events" value={inputEvents} placeholder="Schedule a new event" onChange={handleInputEvents}/>
             {/* <DatePicker />   */}
             <Button className="mt10" icon="plus" text="Add" />
           </div>
@@ -74,10 +85,8 @@ function Edit() {
         <div className="flex-sb mt20">
           <div>
             <h1 className="heading">Tenants</h1>
-            <InputGroup leftIcon="person" value={inputEvents} placeholder="First name"
-              onChange={handleInputEvents}/>
-            <InputGroup leftIcon="person" value={inputEvents} placeholder="Last name"
-              onChange={handleInputEvents} className="mt10"/>
+            <InputGroup leftIcon="person" value={inputEvents} placeholder="First name" onChange={handleInputEvents}/>
+            <InputGroup leftIcon="person" value={inputEvents} placeholder="Last name" onChange={handleInputEvents} className="mt10"/>
             <Button className="mt10" icon="plus" text="Add" />
           </div>
         </div>
@@ -85,12 +94,9 @@ function Edit() {
         <div className="flex-sb mt20 space">
           <div>
             <h1 className="heading">Maintenance Log</h1>
-            <InputGroup leftIcon="calendar" value={inputEvents} placeholder="Date"
-              onChange={handleInputEvents} className="mt10"/>
-            <InputGroup leftIcon="id-number" value={inputEvents} placeholder="Technician"
-              onChange={handleInputEvents} className="mt10"/>
-            <InputGroup leftIcon="issue" value={inputEvents} placeholder="Issue"
-              onChange={handleInputEvents} className="mt10"/>
+            <InputGroup leftIcon="calendar" value={inputEvents} placeholder="Date" onChange={handleInputEvents} className="mt10"/>
+            <InputGroup leftIcon="id-number" value={inputEvents} placeholder="Technician" onChange={handleInputEvents} className="mt10"/>
+            <InputGroup leftIcon="issue" value={inputEvents} placeholder="Issue" onChange={handleInputEvents} className="mt10"/>
             <Checkbox checked={true} className="mt10">
               Resolved?
             </Checkbox>

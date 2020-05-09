@@ -13,7 +13,7 @@ function ContextProvider({children}) {
     axios.get('http://localhost:5000/residential/')
     .then(res => {
       console.log('Updating properties data')
-      setPropertiesData(res.data.data)
+      setPropertiesData(res.data)
     })
     .catch(err => console.log(err))
   }, [])
