@@ -1,6 +1,7 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
 import {useParams} from 'react-router-dom'
-import {Button, HTMLTable, InputGroup, TextArea, Card, Elevation, FormGroup} from "@blueprintjs/core"
+import {Button, HTMLTable, InputGroup, Card, Elevation} from "@blueprintjs/core"
+import axios from 'axios'
 
 import {Context} from '../Context'
 import LineChart from '../components/LineChart'
@@ -8,36 +9,82 @@ import image from '../img/house2.jpg'
 
 function PropertyOverview() {
 
-  let { propertyNo } = useParams()
-  const { propertiesData } = useContext(Context)
-  const property = propertiesData[propertyNo]
-
+  let   { propertyNo }            = useParams()
+  const { propertiesData }        = useContext(Context)
+  const [property, setProperty]   = useState(propertiesData[propertyNo])
   const [isEditing, setIsEditing] = useState({address: false, utilities: false, events: false, notes: false, stats: false})
+  const [inputData, setInputData] = useState({
+    propertyName:       property.name, 
+    propertyNoOfUnits:  0, 
+    propertyStreet:     property.street,
+    propertyCity:       property.city, 
+    propertyState:      property.state, 
+    propertyZip:        property.zip,
 
-  function view() {
-    return (
-      <>
+    propertyPower:      property.utilities.power,
+    propertyGas:        property.utilities.gas,
+    propertyWater:      property.utilities.water,
+    propertySewage:     property.utilities.sewage,
+    propertyWaste:      property.utilities.waste,
+    propertyInternet:   property.utilities.internet,
+    propertyLawncare:   property.utilities.lawncare
+  })
+
+  // If the local property data has changed then update the DB
+  useEffect(() => {
+    axios.post(`http://localhost:5000/residential/update/${property._id}`, property)
+      .then(res => console.log(res.data))
+    console.log('New property data submitted to DB')
+  }, [property])
+
+  function handleChange(event) {
+    const {name, value} = event.target
+    setInputData(prevInputData => ({...prevInputData, [name]: value}))
+  }
+
+  return (
+    <div className="content">
+      <div className="flex-sb ac">
+        <h1 className="title noselect">
+          {property.name}
+        </h1>
+      </div>
+      
+      <hr />
+
+      <div className="content-inner">
         <div className="main">
 
-          {/* <div className="flex-sb">
-            <p className="address">
-              {property.street}<br />
-              {`${property.city}, ${property.state} ${property.zip}`}<br />
-              <Button className="mt10" icon="map" text="View on map" />
-            </p>
-          </div> */}
-
-          <Card interactive={true} elevation={Elevation.ZERO} onClick={() => setIsEditing(prevInputData => ({...prevInputData, address: !isEditing.address}))} className="mt20">
+          <Card interactive={true} elevation={Elevation.ZERO} className="mt20" onClick={() => {
+            if (!isEditing.address)
+              setIsEditing(prevInputData => ({...prevInputData, address: true}))
+          }}>
             {
               isEditing.address ?
                 <>
-                  <InputGroup leftIcon="map-marker" className="mt10" placeholder="Street" />
+                  <InputGroup   className="mt10" value={inputData.propertyStreet} name="propertyStreet" onChange={handleChange} />
                   <div className="flex-sb">
-                    <InputGroup leftIcon="map-marker" className="mt10" placeholder="City" />
-                    <InputGroup leftIcon="map-marker" className="mt10" placeholder="State" />
-                    <InputGroup leftIcon="map-marker" className="mt10" placeholder="ZIP" />
+                    <InputGroup className="mt10" value={inputData.propertyCity}   name="propertyCity"   onChange={handleChange} />
+                    <InputGroup className="mt10" value={inputData.propertyState}  name="propertyState"  onChange={handleChange} />
+                    <InputGroup className="mt10" value={inputData.propertyZip}    name="propertyZip"    onChange={handleChange} />
                   </div>
-                  <Button className="mt10" icon="plus" text="Add" />
+                  <div className="flex-sb">
+                    <Button className="mt10" intent="success" icon="floppy-disk" text="Save" onClick={() => {
+                      // Verify form data
+                      // Set the edit var to false
+                      setIsEditing(prevInputData => ({...prevInputData, address: false}))
+                      // New reference
+                      var newProperty = {
+                        ...property,
+                        street: inputData.propertyStreet,
+                        city:   inputData.propertyCity,
+                        state:  inputData.propertyState,
+                        zip:    inputData.propertyZip
+                      }
+                      setProperty(newProperty)
+                    }}/>
+                    <Button className="mt10" intent="danger" icon="cross" text="Cancel" onClick={() => {setIsEditing(prevInputData => ({...prevInputData, address: false}))}} />
+                  </div>
                 </>
               :
                 <>
@@ -50,7 +97,10 @@ function PropertyOverview() {
             }
           </Card>
 
-          <Card interactive={true} elevation={Elevation.ZERO} onClick={() => setIsEditing(prevInputData => ({...prevInputData, utilities: !isEditing.utilities}))} className="mt20">
+          <Card interactive={true} elevation={Elevation.ZERO} className="mt20" onClick={() => {
+            if (!isEditing.utilities)
+              setIsEditing(prevInputData => ({...prevInputData, utilities: true}))
+          }}>
             <h1 className="heading">Utilities</h1>
             {
               isEditing.utilities ?
@@ -62,14 +112,36 @@ function PropertyOverview() {
                     <InputGroup id="gas-input" placeholder={property.utilities.gas}/>
                   </FormGroup> */}
 
-                  <InputGroup className="mt10" placeholder={property.utilities.power} />
-                  <InputGroup className="mt10" placeholder={property.utilities.gas} />
-                  <InputGroup className="mt10" placeholder={property.utilities.water} />
-                  <InputGroup className="mt10" placeholder={property.utilities.sewage} />
-                  <InputGroup className="mt10" placeholder={property.utilities.waste} />
-                  <InputGroup className="mt10" placeholder={property.utilities.internet} />
-                  <InputGroup className="mt10" placeholder={property.utilities.lawncare} />
-                  <Button className="mt10" icon="plus" text="Add" />
+                  <InputGroup className="mt10" value={inputData.propertyPower}    name="propertyPower"    onChange={handleChange} />
+                  <InputGroup className="mt10" value={inputData.propertyGas}      name="propertyGas"      onChange={handleChange} />
+                  <InputGroup className="mt10" value={inputData.propertyWater}    name="propertyWater"    onChange={handleChange} />
+                  <InputGroup className="mt10" value={inputData.propertySewage}   name="propertySewage"   onChange={handleChange} />
+                  <InputGroup className="mt10" value={inputData.propertyWaste}    name="propertyWaste"    onChange={handleChange} />
+                  <InputGroup className="mt10" value={inputData.propertyInternet} name="propertyInternet" onChange={handleChange} />
+                  <InputGroup className="mt10" value={inputData.propertyLawncare} name="propertyLawncare" onChange={handleChange} />
+                  <div className="flex-sb">
+                    <Button className="mt10" intent="success" icon="floppy-disk" text="Save" onClick={() => {
+                      // Verify form data
+                      // Set the edit var to false
+                      setIsEditing(prevInputData => ({...prevInputData, utilities: false}))
+                      // New reference
+                      var newUtilities = {
+                        power:    inputData.propertyPower,
+                        gas:      inputData.propertyGas,
+                        water:    inputData.propertyWater,
+                        sewage:   inputData.propertySewage,
+                        waste:    inputData.propertyWaste,
+                        internet: inputData.propertyInternet,
+                        lawncare: inputData.propertyLawncare
+                      }
+                      var newProperty = {
+                        ...property,
+                        utilities: newUtilities
+                      }
+                      setProperty(newProperty)
+                    }}/>
+                    <Button className="mt10" intent="danger" icon="cross" text="Cancel" onClick={() => {setIsEditing(prevInputData => ({...prevInputData, utilities: false}))}} />
+                  </div>
                 </>
               :
                 <>
@@ -119,7 +191,7 @@ function PropertyOverview() {
               :
                 <>
                   {
-                    property.events ?
+                    property.events.length > 0 ?
                       <HTMLTable className="width100" bordered={true} striped={true} condensed={true}>
                         <thead>
                           <tr>
@@ -212,90 +284,7 @@ function PropertyOverview() {
             </div>
           </div>
         </div>
-      </>
-    )
-  }
 
-  function edit() {
-    return (
-      <>
-        <div className="main">
-
-          <div className="flex-sb">
-            <div>
-              <h1 className="heading">Address</h1>
-              <InputGroup leftIcon="map-marker" className="mt10" placeholder="Street" />
-              <InputGroup leftIcon="map-marker" className="mt10" placeholder="City" />
-              <InputGroup leftIcon="map-marker" className="mt10" placeholder="State" />
-              <InputGroup leftIcon="map-marker" className="mt10" placeholder="ZIP" />
-              <Button className="mt10" icon="plus" text="Add" />
-            </div>
-          </div>
-
-          <div className="flex-sb">
-            <div>
-              <h1 className="heading">Utilities / Services</h1>
-              <InputGroup className="mt10" placeholder="Power" />
-              <InputGroup className="mt10" placeholder="Gas" />
-              <InputGroup className="mt10" placeholder="Water" />
-              <InputGroup className="mt10" placeholder="Sewage" />
-              <InputGroup className="mt10" placeholder="Waste" />
-              <InputGroup className="mt10" placeholder="Internet" />
-              <InputGroup className="mt10" placeholder="Lawncare" />
-              <Button className="mt10" icon="plus" text="Add" />
-            </div>
-          </div>
-
-          <div className="flex-sb">
-            <div>
-              <h1 className="heading">Events</h1>
-              <InputGroup leftIcon="timeline-events" className="mt10" placeholder="Date" />
-              <InputGroup leftIcon="timeline-events" className="mt10" placeholder="Event Info" />
-              <Button className="mt10" icon="plus" text="Add" />
-            </div>
-          </div>
-
-          <div className="flex-sb">
-            <div>
-              <h1 className="heading">Notes</h1>
-              <TextArea
-                growVertically={true}
-                rows="4" 
-                cols="40"
-              />
-              <Button className="mt10" icon="plus" text="Add" />
-            </div>
-          </div>
-
-        </div>
-      </>
-    )
-  }
-
-  console.log(isEditing)
-
-  return (
-    <div className="content">
-      <div className="flex-sb ac">
-        <h1 className="title noselect">
-          {property.name}
-        </h1>
-        {
-          isEditing ?
-            <Button className="h20" icon="edit" text="Done" onClick={() => setIsEditing(!isEditing)} />
-          :
-            <Button className="h20" icon="edit" text="Edit" onClick={() => setIsEditing(!isEditing)} />
-        }
-      </div>
-      <hr />
-      <div className="content-inner">
-        {/* {
-          isEditing.address ?
-            edit()
-          :
-            view()
-        } */}
-        {view()}
       </div>
     </div>
   )

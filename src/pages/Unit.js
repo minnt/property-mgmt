@@ -15,18 +15,6 @@ function Unit() {
   const property = propertiesData[propertyNo]
   const unit = propertiesData[propertyNo].units[unitNo]
 
-  function view() {
-    return (
-      <></>
-    )
-  }
-
-  function edit() {
-    return (
-      <></>
-    )
-  }
-
   return (
     <div className="content">
       <div className="flex-sb ac">

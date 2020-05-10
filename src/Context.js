@@ -44,7 +44,7 @@ function ContextProvider({children}) {
     //setPropertiesData(newState)
 
     axios.post('http://localhost:5000/residential/add', data)
-      .then(res => console.log(res.data))  
+      .then(res => console.log(res.data))
   }
 
 

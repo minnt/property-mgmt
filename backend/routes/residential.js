@@ -46,8 +46,9 @@ router.route('/update/:id').post((req, res) => {
       property.city = req.body.city
       property.state = req.body.state
       property.zip = req.body.zip
-      // { name, street, city, state, zip } = req.body
 
+      property.utilities = req.body.utilities
+      // { name, street, city, state, zip } = req.body
       property.save()
         .then(() => res.json('Property updated!'))
         .catch(err => res.status(400).json('Error: ' + err))
