@@ -8,14 +8,14 @@ function ContextProvider({children}) {
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [propertiesData, setPropertiesData] = useState([])
 
-  // Load properties data
+  // Load all properties data
   useEffect(() => {
     axios.get('http://localhost:5000/residential/')
-    .then(res => {
-      console.log('Updating properties data')
-      setPropertiesData(res.data)
-    })
-    .catch(err => console.log(err))
+      .then(res => {
+        console.log('Loading properties data')
+        setPropertiesData(res.data)
+      })
+      .catch(err => console.log(err))
   }, [])
 
   function toggleDarkMode() {

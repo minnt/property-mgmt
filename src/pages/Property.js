@@ -1,37 +1,83 @@
-import React, {useState, useContext, useEffect} from 'react'
+import React, {useState, useRef, useLayoutEffect, useEffect} from 'react'
 import {useParams} from 'react-router-dom'
 import {Button, HTMLTable, InputGroup, Card, Elevation} from "@blueprintjs/core"
 import axios from 'axios'
 
-import {Context} from '../Context'
+// import {Context} from '../Context'
 import LineChart from '../components/LineChart'
 import image from '../img/house2.jpg'
 
 function PropertyOverview() {
 
-  let   { propertyNo }            = useParams()
-  const { propertiesData }        = useContext(Context)
-  const [property, setProperty]   = useState(propertiesData[propertyNo])
+  let   { propertyId }            = useParams()
+  // const { propertiesData }        = useContext(Context)
+  const [isLoading, setIsLoading] = useState(true)
+  const [property,  setProperty]  = useState({})
   const [isEditing, setIsEditing] = useState({address: false, utilities: false, events: false, notes: false, stats: false})
-  const [inputData, setInputData] = useState({
-    propertyName:       property.name, 
-    propertyNoOfUnits:  0, 
-    propertyStreet:     property.street,
-    propertyCity:       property.city, 
-    propertyState:      property.state, 
-    propertyZip:        property.zip,
+  const [inputData, setInputData] = useState({})
 
-    propertyPower:      property.utilities.power,
-    propertyGas:        property.utilities.gas,
-    propertyWater:      property.utilities.water,
-    propertySewage:     property.utilities.sewage,
-    propertyWaste:      property.utilities.waste,
-    propertyInternet:   property.utilities.internet,
-    propertyLawncare:   property.utilities.lawncare
-  })
+  console.log(propertyId)
 
-  // If the local property data has changed then update the DB
+  // function loadData() {
+  //   setInputData({
+  //     propertyName:       property.name, 
+  //     propertyNoOfUnits:  0, 
+  //     propertyStreet:     property.street,
+  //     propertyCity:       property.city, 
+  //     propertyState:      property.state, 
+  //     propertyZip:        property.zip,
+  
+  //     propertyPower:      property.utilities.power,
+  //     propertyGas:        property.utilities.gas,
+  //     propertyWater:      property.utilities.water,
+  //     propertySewage:     property.utilities.sewage,
+  //     propertyWaste:      property.utilities.waste,
+  //     propertyInternet:   property.utilities.internet,
+  //     propertyLawncare:   property.utilities.lawncare
+  //   })
+  // }
+
+  // Load property data from DB
   useEffect(() => {
+
+    function fetchData() {
+      axios.get(`http://localhost:5000/residential/${propertyId}`)
+        .then(res => {
+          console.log('Loading properties data')
+          setProperty(res.data)
+          setIsLoading(false)
+
+          setInputData({
+            propertyName:       res.data.name, 
+            propertyNoOfUnits:  0, 
+            propertyStreet:     res.data.street,
+            propertyCity:       res.data.city, 
+            propertyState:      res.data.state, 
+            propertyZip:        res.data.zip,
+        
+            propertyPower:      res.data.utilities.power,
+            propertyGas:        res.data.utilities.gas,
+            propertyWater:      res.data.utilities.water,
+            propertySewage:     res.data.utilities.sewage,
+            propertyWaste:      res.data.utilities.waste,
+            propertyInternet:   res.data.utilities.internet,
+            propertyLawncare:   res.data.utilities.lawncare
+          })
+          console.log("Input data set")
+        })
+        .catch(err => console.log(err))
+    }
+
+    fetchData()
+  }, [propertyId])
+
+  // If the local property data has changed then update the DB, do not fire on first render
+  const firstUpdate = useRef(true)
+  useLayoutEffect(() => {
+    if (firstUpdate.current) {
+      firstUpdate.current = false
+      return
+    }
     axios.post(`http://localhost:5000/residential/update/${property._id}`, property)
       .then(res => console.log(res.data))
     console.log('New property data submitted to DB')
@@ -44,6 +90,13 @@ function PropertyOverview() {
 
   return (
     <div className="content">
+      { 
+        isLoading ?
+          <>
+            Loading...
+          </>
+        :
+        <>
       <div className="flex-sb ac">
         <h1 className="title noselect">
           {property.name}
@@ -286,6 +339,8 @@ function PropertyOverview() {
         </div>
 
       </div>
+      </>
+      }
     </div>
   )
 }

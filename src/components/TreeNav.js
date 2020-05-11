@@ -122,7 +122,7 @@ function TreeNav() {
           id: index1,
           icon: "map-marker",
           label: (
-            <Link to={`/property/${index1}`}>
+            <Link to={`/property/${property._id}`}>
               {property.name}
             </Link>
           ),
@@ -137,7 +137,7 @@ function TreeNav() {
             id: index2,
             icon: "symbol-circle",
             label: (
-              <Link to={`/property/${index1}/unit/${index2}`}>
+              <Link to={`/property/${property._id}/unit/${index2}`}>
                 {`Unit ${unit.unitNumber}`}
               </Link>
             )

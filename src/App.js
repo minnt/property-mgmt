@@ -37,10 +37,10 @@ function App() {
             <Route exact path="/">
               <Welcome />
             </Route>
-            <Route path="/property/:propertyNo/unit/:unitNo">
+            <Route path="/property/:propertyId/unit/:unitNo">
               <Unit />
             </Route>
-            <Route path="/property/:propertyNo">
+            <Route path="/property/:propertyId">
               <Property />
             </Route>
             <Route path="/tenant/:tenantNo">
