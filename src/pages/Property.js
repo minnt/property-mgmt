@@ -4,6 +4,7 @@ import {Button, HTMLTable, InputGroup, Card, Elevation} from "@blueprintjs/core"
 import axios from 'axios'
 
 // import {Context} from '../Context'
+import {AppToaster} from "../utils/toaster"
 import LineChart from '../components/LineChart'
 import image from '../img/house2.jpg'
 
@@ -16,36 +17,13 @@ function PropertyOverview() {
   const [isEditing, setIsEditing] = useState({address: false, utilities: false, events: false, notes: false, stats: false})
   const [inputData, setInputData] = useState({})
 
-  console.log(propertyId)
-
-  // function loadData() {
-  //   setInputData({
-  //     propertyName:       property.name, 
-  //     propertyNoOfUnits:  0, 
-  //     propertyStreet:     property.street,
-  //     propertyCity:       property.city, 
-  //     propertyState:      property.state, 
-  //     propertyZip:        property.zip,
-  
-  //     propertyPower:      property.utilities.power,
-  //     propertyGas:        property.utilities.gas,
-  //     propertyWater:      property.utilities.water,
-  //     propertySewage:     property.utilities.sewage,
-  //     propertyWaste:      property.utilities.waste,
-  //     propertyInternet:   property.utilities.internet,
-  //     propertyLawncare:   property.utilities.lawncare
-  //   })
-  // }
-
   // Load property data from DB
   useEffect(() => {
-
     function fetchData() {
       axios.get(`http://localhost:5000/residential/${propertyId}`)
         .then(res => {
           console.log('Loading properties data')
           setProperty(res.data)
-          setIsLoading(false)
 
           setInputData({
             propertyName:       res.data.name, 
@@ -61,13 +39,15 @@ function PropertyOverview() {
             propertySewage:     res.data.utilities.sewage,
             propertyWaste:      res.data.utilities.waste,
             propertyInternet:   res.data.utilities.internet,
-            propertyLawncare:   res.data.utilities.lawncare
+            propertyLawncare:   res.data.utilities.lawncare,
+
+            propertyEvents:     res.data.events
           })
-          console.log("Input data set")
+
+          setIsLoading(false)
         })
         .catch(err => console.log(err))
     }
-
     fetchData()
   }, [propertyId])
 
@@ -88,15 +68,30 @@ function PropertyOverview() {
     setInputData(prevInputData => ({...prevInputData, [name]: value}))
   }
 
+  function handleChangeEvents(event, index, type) {
+    const value = event.target.value
+
+    let newPropertyEvent = inputData.propertyEvents
+    if (type === 'date') {
+      newPropertyEvent[index].date = value
+    } else if (type === 'info') {
+      newPropertyEvent[index].info = value
+    }
+    setInputData(prevInputData => ({
+      ...prevInputData,
+      propertyEvents: newPropertyEvent
+    }))
+  }
+
+  const showToast = () => {
+    // create toasts in response to interactions.
+    // in most cases, it's enough to simply create and forget (thanks to timeout).
+    AppToaster.show({message: "Changes saved", intent: "success"})
+  }
+
   return (
     <div className="content">
-      { 
-        isLoading ?
-          <>
-            Loading...
-          </>
-        :
-        <>
+      {isLoading ? <>Loading...</>:<>
       <div className="flex-sb ac">
         <h1 className="title noselect">
           {property.name}
@@ -135,6 +130,7 @@ function PropertyOverview() {
                         zip:    inputData.propertyZip
                       }
                       setProperty(newProperty)
+                      showToast()
                     }}/>
                     <Button className="mt10" intent="danger" icon="cross" text="Cancel" onClick={() => {setIsEditing(prevInputData => ({...prevInputData, address: false}))}} />
                   </div>
@@ -217,7 +213,7 @@ function PropertyOverview() {
             }
           </Card>
 
-          <Card interactive={true} elevation={Elevation.ZERO} onClick={() => setIsEditing(prevInputData => ({...prevInputData, events: !isEditing.events}))} className="mt20">
+          <Card interactive={true} elevation={Elevation.ZERO} onClick={() => setIsEditing(prevInputData => ({...prevInputData, events: true}))} className="mt20">
             <h1 className="heading">Events</h1>
             {
               isEditing.events ?
@@ -225,11 +221,11 @@ function PropertyOverview() {
                   <p className="mt20">Edit:</p>
                   {
                     // INFO AS ID, FIX
-                    property.events.map(event => {
+                    property.events.map((propertyEvent, index) => {
                       return (
-                        <div key={event.info} className="flex-sb">
-                          <InputGroup className="mt10 width45" small={true} placeholder={event.date} />
-                          <InputGroup className="mt10 width45" small={true} placeholder={event.info} />
+                        <div key={propertyEvent.id} className="flex-sb">
+                          <InputGroup className="mt10 width45" small={true} value={inputData.propertyEvents[index].date} onChange={(e) => {handleChangeEvents(e, index, 'date')}} />
+                          <InputGroup className="mt10 width45" small={true} value={inputData.propertyEvents[index].info} onChange={(e) => {handleChangeEvents(e, index, 'info')}} />
                         </div>
                       )
                     })
@@ -339,8 +335,7 @@ function PropertyOverview() {
         </div>
 
       </div>
-      </>
-      }
+      </>}
     </div>
   )
 }
