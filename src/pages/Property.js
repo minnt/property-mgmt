@@ -2,8 +2,8 @@ import React, {useState, useRef, useLayoutEffect, useEffect} from 'react'
 import {useParams} from 'react-router-dom'
 import {Button, HTMLTable, InputGroup, Card, Elevation} from "@blueprintjs/core"
 import axios from 'axios'
+import {cloneDeep} from 'lodash'
 
-// import {Context} from '../Context'
 import {AppToaster} from "../utils/toaster"
 import LineChart from '../components/LineChart'
 import image from '../img/house2.jpg'
@@ -11,10 +11,9 @@ import image from '../img/house2.jpg'
 function PropertyOverview() {
 
   let   { propertyId }            = useParams()
-  // const { propertiesData }        = useContext(Context)
   const [isLoading, setIsLoading] = useState(true)
-  const [property,  setProperty]  = useState({})
   const [isEditing, setIsEditing] = useState({address: false, utilities: false, events: false, notes: false, stats: false})
+  const [property,  setProperty]  = useState({})
   const [inputData, setInputData] = useState({})
 
   // Load property data from DB
@@ -26,22 +25,26 @@ function PropertyOverview() {
           setProperty(res.data)
 
           setInputData({
-            propertyName:       res.data.name, 
-            propertyNoOfUnits:  0, 
-            propertyStreet:     res.data.street,
-            propertyCity:       res.data.city, 
-            propertyState:      res.data.state, 
-            propertyZip:        res.data.zip,
+            propertyName:         res.data.name, 
+            propertyNoOfUnits:    0, 
+            propertyStreet:       res.data.street,
+            propertyCity:         res.data.city, 
+            propertyState:        res.data.state, 
+            propertyZip:          res.data.zip,
         
-            propertyPower:      res.data.utilities.power,
-            propertyGas:        res.data.utilities.gas,
-            propertyWater:      res.data.utilities.water,
-            propertySewage:     res.data.utilities.sewage,
-            propertyWaste:      res.data.utilities.waste,
-            propertyInternet:   res.data.utilities.internet,
-            propertyLawncare:   res.data.utilities.lawncare,
+            propertyPower:        res.data.utilities.power,
+            propertyGas:          res.data.utilities.gas,
+            propertyWater:        res.data.utilities.water,
+            propertySewage:       res.data.utilities.sewage,
+            propertyWaste:        res.data.utilities.waste,
+            propertyInternet:     res.data.utilities.internet,
+            propertyLawncare:     res.data.utilities.lawncare,
 
-            propertyEvents:     res.data.events
+            propertyEvents:       cloneDeep(res.data.events),
+            // propertyEvents:       JSON.parse(JSON.stringify(res.data.events)),
+
+            propertyNewEventDate: '',
+            propertyNewEventInfo: ''
           })
 
           setIsLoading(false)
@@ -61,6 +64,7 @@ function PropertyOverview() {
     axios.post(`http://localhost:5000/residential/update/${property._id}`, property)
       .then(res => console.log(res.data))
     console.log('New property data submitted to DB')
+    showToast()
   }, [property])
 
   function handleChange(event) {
@@ -69,17 +73,23 @@ function PropertyOverview() {
   }
 
   function handleChangeEvents(event, index, type) {
+    // Get value
     const value = event.target.value
 
-    let newPropertyEvent = inputData.propertyEvents
+    // Create new var
+    let newPropertyEvents = [...inputData.propertyEvents]
+
+    // Update
     if (type === 'date') {
-      newPropertyEvent[index].date = value
+      newPropertyEvents[index].date = value
     } else if (type === 'info') {
-      newPropertyEvent[index].info = value
+      newPropertyEvents[index].info = value
     }
+
+    // Merge
     setInputData(prevInputData => ({
       ...prevInputData,
-      propertyEvents: newPropertyEvent
+      propertyEvents: [...newPropertyEvents]
     }))
   }
 
@@ -105,7 +115,7 @@ function PropertyOverview() {
 
           <Card interactive={true} elevation={Elevation.ZERO} className="mt20" onClick={() => {
             if (!isEditing.address)
-              setIsEditing(prevInputData => ({...prevInputData, address: true}))
+              setIsEditing(prevState => ({...prevState, address: true}))
           }}>
             {
               isEditing.address ?
@@ -130,7 +140,6 @@ function PropertyOverview() {
                         zip:    inputData.propertyZip
                       }
                       setProperty(newProperty)
-                      showToast()
                     }}/>
                     <Button className="mt10" intent="danger" icon="cross" text="Cancel" onClick={() => {setIsEditing(prevInputData => ({...prevInputData, address: false}))}} />
                   </div>
@@ -148,7 +157,7 @@ function PropertyOverview() {
 
           <Card interactive={true} elevation={Elevation.ZERO} className="mt20" onClick={() => {
             if (!isEditing.utilities)
-              setIsEditing(prevInputData => ({...prevInputData, utilities: true}))
+              setIsEditing(prevState => ({...prevState, utilities: true}))
           }}>
             <h1 className="heading">Utilities</h1>
             {
@@ -185,7 +194,7 @@ function PropertyOverview() {
                       }
                       var newProperty = {
                         ...property,
-                        utilities: newUtilities
+                        utilities: {...newUtilities}
                       }
                       setProperty(newProperty)
                     }}/>
@@ -213,34 +222,67 @@ function PropertyOverview() {
             }
           </Card>
 
-          <Card interactive={true} elevation={Elevation.ZERO} onClick={() => setIsEditing(prevInputData => ({...prevInputData, events: true}))} className="mt20">
+          <Card interactive={true} elevation={Elevation.ZERO} className="mt20" onClick={() => {
+            if (!isEditing.events)
+              setIsEditing(prevState => ({...prevState, events: true}))
+          }}>
             <h1 className="heading">Events</h1>
             {
               isEditing.events ?
                 <>
+                  {/* Input fields for editing events */}
                   <p className="mt20">Edit:</p>
                   {
-                    // INFO AS ID, FIX
-                    property.events.map((propertyEvent, index) => {
+                    inputData.propertyEvents.map((propertyEvent, index) => {
                       return (
                         <div key={propertyEvent.id} className="flex-sb">
-                          <InputGroup className="mt10 width45" small={true} value={inputData.propertyEvents[index].date} onChange={(e) => {handleChangeEvents(e, index, 'date')}} />
-                          <InputGroup className="mt10 width45" small={true} value={inputData.propertyEvents[index].info} onChange={(e) => {handleChangeEvents(e, index, 'info')}} />
+                          <InputGroup className="mt10 width45" small={true} value={propertyEvent.date} onChange={(e) => {handleChangeEvents(e, index, 'date')}} />
+                          <InputGroup className="mt10 width45" small={true} value={propertyEvent.info} onChange={(e) => {handleChangeEvents(e, index, 'info')}} />
                         </div>
                       )
                     })
                   }
+
+                  {/* Input fields for adding a new event */}
                   <p className="mt20">New:</p>
                   <div className="flex-sb">
-                    <InputGroup className="mt10 width45" placeholder="New event date" />
-                    <InputGroup className="mt10 width45" placeholder="New event info" />
+                    <InputGroup className="mt10 width45" value={inputData.propertyNewEventDate} placeholder="New event date" name="propertyNewEventDate" onChange={handleChange} />
+                    <InputGroup className="mt10 width45" value={inputData.propertyNewEventInfo} placeholder="New event info" name="propertyNewEventInfo" onChange={handleChange} />
                   </div>
-                  <Button className="mt10" icon="plus" text="Add" />
+
+                  {/* Add button */}
+                  <Button className="mt10" icon="plus" text="Add" onClick={() => {
+                    let newEvent = {date: inputData.propertyNewEventDate, info: inputData.propertyNewEventInfo, id: inputData.propertyEvents.length}
+                    let newPropertyEvents = [...inputData.propertyEvents]
+                    newPropertyEvents.push(newEvent)
+                    setInputData(prevInputData => ({
+                      ...prevInputData,
+                      propertyEvents: newPropertyEvents,
+                      propertyNewEventDate: '',
+                      propertyNewEventInfo: ''
+                    }))
+                  }}/>
+
+                  <div className="flex-sb">
+                    {/* Save button */}
+                    <Button className="mt10" intent="success" icon="floppy-disk" text="Save" onClick={() => {
+                      setIsEditing(prevInputData => ({...prevInputData, events: false}))
+                      var newProperty = {
+                        ...property,
+                        events: [...inputData.propertyEvents]
+                      }
+                      setProperty(newProperty)
+                    }}/>
+
+                    {/* Cancel button */}
+                    <Button className="mt10" intent="danger" icon="cross" text="Cancel" onClick={() => {setIsEditing(prevState => ({...prevState, events: false}))}} />
+                  </div>
                 </>
               :
                 <>
                   {
                     property.events.length > 0 ?
+                      // Render events as a table
                       <HTMLTable className="width100" bordered={true} striped={true} condensed={true}>
                         <thead>
                           <tr>
@@ -250,10 +292,9 @@ function PropertyOverview() {
                         </thead>
                         <tbody>
                           {
-                            // DATE AS ID, FIX
                             property.events.map(event => {
                               return (
-                                <tr key={event.date}>
+                                <tr key={event.id}>
                                   <td>{event.date}</td>
                                   <td>{event.info}</td>
                                 </tr>

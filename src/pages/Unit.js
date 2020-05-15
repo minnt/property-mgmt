@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import {useParams} from 'react-router-dom'
-import {Button, HTMLTable, InputGroup, NumericInput, TextArea, FileInput, Checkbox, Card, Elevation} from "@blueprintjs/core"
+import {Button, HTMLTable, Card, Elevation} from "@blueprintjs/core"
 import axios from 'axios'
 // import {DatePicker} from "@blueprintjs/datetime"
 
