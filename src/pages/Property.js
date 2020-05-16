@@ -1,6 +1,6 @@
 import React, {useState, useRef, useLayoutEffect, useEffect} from 'react'
 import {useParams} from 'react-router-dom'
-import {Button, HTMLTable, InputGroup, Card, Elevation} from "@blueprintjs/core"
+import {Button, HTMLTable, InputGroup, Card, Elevation, Spinner} from "@blueprintjs/core"
 import axios from 'axios'
 import {cloneDeep} from 'lodash'
 
@@ -10,7 +10,7 @@ import image from '../img/house2.jpg'
 
 function PropertyOverview() {
 
-  let   { propertyId }            = useParams()
+  let   {propertyId}              = useParams()
   const [isLoading, setIsLoading] = useState(true)
   const [isEditing, setIsEditing] = useState({address: false, utilities: false, events: false, notes: false, stats: false})
   const [property,  setProperty]  = useState({})
@@ -46,8 +46,8 @@ function PropertyOverview() {
             propertyNewEventDate: '',
             propertyNewEventInfo: ''
           })
-
-          setIsLoading(false)
+          setTimeout(() => {setIsLoading(false)}, 2000);
+          // setIsLoading(false)
         })
         .catch(err => console.log(err))
     }
@@ -101,7 +101,10 @@ function PropertyOverview() {
 
   return (
     <div className="content">
-      {isLoading ? <>Loading...</>:<>
+      {isLoading ? 
+        <div className="flex-sb ac">
+          <Spinner size={Spinner.SIZE_LARGE} />
+        </div>:<>
       <div className="flex-sb ac">
         <h1 className="title noselect">
           {property.name}
