@@ -1,6 +1,6 @@
 import React, {useState, useRef, useLayoutEffect, useEffect} from 'react'
 import {useParams} from 'react-router-dom'
-import {Button, HTMLTable, InputGroup, Card, Elevation, Spinner} from "@blueprintjs/core"
+import {Button, HTMLTable, InputGroup, Card, Elevation, Spinner, Icon, Tooltip, Position} from "@blueprintjs/core"
 import axios from 'axios'
 import {cloneDeep} from 'lodash'
 
@@ -42,6 +42,7 @@ function PropertyOverview() {
 
             propertyEvents:       cloneDeep(res.data.events),
             // propertyEvents:       JSON.parse(JSON.stringify(res.data.events)),
+            propertyNotes:        cloneDeep(res.data.notes),
 
             propertyNewEventDate: '',
             propertyNewEventInfo: ''
@@ -90,6 +91,19 @@ function PropertyOverview() {
     setInputData(prevInputData => ({
       ...prevInputData,
       propertyEvents: [...newPropertyEvents]
+    }))
+  }
+
+  function handleChangeNotes(event, index) {
+    const value = event.target.value
+
+    let newPropertyNotes = [...inputData.propertyNotes]
+
+    newPropertyNotes[index].info = value
+
+    setInputData(prevInputData => ({
+      ...prevInputData,
+      propertyNotes: [...newPropertyNotes]
     }))
   }
 
@@ -238,9 +252,19 @@ function PropertyOverview() {
                   {
                     inputData.propertyEvents.map((propertyEvent, index) => {
                       return (
-                        <div key={propertyEvent.id} className="flex-sb">
-                          <InputGroup className="mt10 width45" small={true} value={propertyEvent.date} onChange={(e) => {handleChangeEvents(e, index, 'date')}} />
-                          <InputGroup className="mt10 width45" small={true} value={propertyEvent.info} onChange={(e) => {handleChangeEvents(e, index, 'info')}} />
+                        <div key={propertyEvent.id} className="flex-sb ac mt10">
+                          {/* Needs a real date input widget */}
+                          <InputGroup className="width45" small={true} value={propertyEvent.date} onChange={(e) => {handleChangeEvents(e, index, 'date')}} />
+                          <InputGroup className="width45" small={true} value={propertyEvent.info} onChange={(e) => {handleChangeEvents(e, index, 'info')}} />
+                          <Tooltip content="Delete" position={Position.TOP}>
+                            <Icon icon='delete' intent='danger' onClick={() => {
+                              const result = inputData.propertyEvents.filter(event => event.id !== propertyEvent.id)
+                              setInputData(prevInputData => ({
+                                ...prevInputData,
+                                propertyEvents: result
+                              }))
+                            }}/>
+                          </Tooltip>
                         </div>
                       )
                     })
@@ -248,23 +272,22 @@ function PropertyOverview() {
 
                   {/* Input fields for adding a new event */}
                   <p className="mt20">New:</p>
-                  <div className="flex-sb">
-                    <InputGroup className="mt10 width45" value={inputData.propertyNewEventDate} placeholder="New event date" name="propertyNewEventDate" onChange={handleChange} />
-                    <InputGroup className="mt10 width45" value={inputData.propertyNewEventInfo} placeholder="New event info" name="propertyNewEventInfo" onChange={handleChange} />
+                  <div className="flex-sb ac mt10">
+                    <InputGroup className="width45" value={inputData.propertyNewEventDate} placeholder="New event date" name="propertyNewEventDate" onChange={handleChange} />
+                    <InputGroup className="width45" value={inputData.propertyNewEventInfo} placeholder="New event info" name="propertyNewEventInfo" onChange={handleChange} />
+                    <Tooltip content="Add" position={Position.TOP}>
+                      <Icon icon='add' intent='primary' onClick={() => {
+                      let newEvent = {date: inputData.propertyNewEventDate, info: inputData.propertyNewEventInfo, id: inputData.propertyEvents.length}
+                      let newPropertyEvents = [...inputData.propertyEvents]
+                      newPropertyEvents.push(newEvent)
+                      setInputData(prevInputData => ({
+                        ...prevInputData,
+                        propertyEvents: newPropertyEvents,
+                        propertyNewEventDate: '',
+                        propertyNewEventInfo: ''
+                      }))}}/>
+                    </Tooltip>
                   </div>
-
-                  {/* Add button */}
-                  <Button className="mt10" icon="plus" text="Add" onClick={() => {
-                    let newEvent = {date: inputData.propertyNewEventDate, info: inputData.propertyNewEventInfo, id: inputData.propertyEvents.length}
-                    let newPropertyEvents = [...inputData.propertyEvents]
-                    newPropertyEvents.push(newEvent)
-                    setInputData(prevInputData => ({
-                      ...prevInputData,
-                      propertyEvents: newPropertyEvents,
-                      propertyNewEventDate: '',
-                      propertyNewEventInfo: ''
-                    }))
-                  }}/>
 
                   <div className="flex-sb">
                     {/* Save button */}
@@ -313,23 +336,48 @@ function PropertyOverview() {
             }
           </Card>
 
-          <Card interactive={true} elevation={Elevation.ZERO} onClick={() => setIsEditing(prevInputData => ({...prevInputData, notes: !isEditing.notes}))} className="mt20">
+          <Card interactive={true} elevation={Elevation.ZERO} className="mt20" onClick={() => {
+            if (!isEditing.notes)
+              setIsEditing(prevState => ({...prevState, notes: true}))
+          }}>
             <h1 className="heading">Notes</h1>
             {
               isEditing.notes ? 
                 <>
                   <p className="mt20">Edit:</p>
                   {
-                    // INFO AS ID, FIX
-                    property.notes.map(note => {
+                    inputData.propertyNotes.map((note, index) => {
                       return (
-                        <InputGroup key={note} className="mt10 width45" small={true} placeholder={note} />
+                        <div key={note.id} className="flex-sb ac mt10">
+                          <InputGroup key={note.id} className="width45" small={true} value={note.info} onChange={(e) => {handleChangeNotes(e, index)}}/>
+                          <Tooltip content="Delete" position={Position.TOP}>
+                            <Icon icon='delete' intent='danger' onClick={console.log('click')} />
+                          </Tooltip>
+                        </div>
                       )
                     })
                   }
                   <p className="mt20">New:</p>
-                  <InputGroup className="mt10 width45" placeholder="New note" />
-                  <Button className="mt10" icon="plus" text="Add" />
+                  <div className="flex-sb ac mt10">
+                    <InputGroup className="mt10 width45" placeholder="New note" />
+                    <Tooltip content="Delete" position={Position.TOP}>
+                      <Icon icon='add' intent='primary' onClick={console.log('click')} />
+                    </Tooltip>
+                  </div>
+                  <div className="flex-sb">
+                    {/* Save button */}
+                    <Button className="mt10" intent="success" icon="floppy-disk" text="Save" onClick={() => {
+                      setIsEditing(prevInputData => ({...prevInputData, notes: false}))
+                      var newProperty = {
+                        ...property,
+                        notes: [...inputData.propertyNotes]
+                      }
+                      setProperty(newProperty)
+                    }}/>
+
+                    {/* Cancel button */}
+                    <Button className="mt10" intent="danger" icon="cross" text="Cancel" onClick={() => {setIsEditing(prevState => ({...prevState, notes: false}))}} />
+                  </div>
                 </>
               :
                 <>
@@ -338,11 +386,10 @@ function PropertyOverview() {
                       <HTMLTable className="width100" bordered={true} striped={true} condensed={true}>
                         <tbody>
                           {
-                            // NOTE AS ID, FIX
                             property.notes.map(note => {
                               return (
-                                <tr key={note}>
-                                  <td>{note}</td>
+                                <tr key={note.id}>
+                                  <td>{note.info}</td>
                                 </tr>
                               )
                             })
