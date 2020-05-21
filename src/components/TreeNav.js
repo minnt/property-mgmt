@@ -162,7 +162,7 @@ function TreeNav() {
 
   // Render
   return (
-    <div className="width25">
+    <div className="tree-nav">
       <Tree
         contents={nodes}
         onNodeClick={handleNodeClick}

@@ -1,5 +1,6 @@
 import React, {useEffect, useContext} from 'react'
 import {Switch, Route} from 'react-router-dom'
+
 import {Context} from './Context'
 
 // Pages
@@ -7,11 +8,11 @@ import Property from './pages/Property'
 import Unit from './pages/Unit'
 import Tenant from './pages/Tenant'
 import Welcome from './pages/Welcome'
+import ViewAll from './pages/ViewAll'
 
 // Components
 import TreeNav from './components/TreeNav'
-import Bar from './components/Bar'
-import ViewAll from './components/ViewAll'
+import TopBar from './components/TopBar'
 
 function App() {
 
@@ -26,30 +27,30 @@ function App() {
   }, [toggleDarkMode])
 
   return (
-    <div className={isDarkMode ? 'container-inline bp3-dark' : 'container-inline'}>
+    <div className={isDarkMode ? 'bp3-dark top-container' : 'top-container'}>
+      <TopBar />
+      <div className='strips'></div>
       <div className={isDarkMode ? 'container darkmode' : 'container lightmode'}>
 
-          <Bar />
+        <TreeNav />
 
-          <TreeNav />
-
-          <Switch>
-            <Route exact path="/">
-              <Welcome />
-            </Route>
-            <Route path="/property/:propertyId/unit/:unitNo">
-              <Unit />
-            </Route>
-            <Route path="/property/:propertyId">
-              <Property />
-            </Route>
-            <Route path="/tenant/:tenantNo">
-              <Tenant />
-            </Route>
-            <Route path="/all">
-              <ViewAll />
-            </Route>
-          </Switch>
+        <Switch>
+          <Route exact path="/">
+            <Welcome />
+          </Route>
+          <Route path="/property/:propertyId/unit/:unitNo">
+            <Unit />
+          </Route>
+          <Route path="/property/:propertyId">
+            <Property />
+          </Route>
+          <Route path="/tenant/:tenantNo">
+            <Tenant />
+          </Route>
+          <Route path="/all">
+            <ViewAll />
+          </Route>
+        </Switch>
 
       </div>
     </div>

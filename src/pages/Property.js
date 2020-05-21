@@ -8,7 +8,7 @@ import {AppToaster} from "../utils/toaster"
 import LineChart from '../components/LineChart'
 import image from '../img/house2.jpg'
 
-function PropertyOverview() {
+function Property() {
 
   let   {propertyId}              = useParams()
   const [isLoading, setIsLoading] = useState(true)
@@ -116,7 +116,7 @@ function PropertyOverview() {
   return (
     <div className="content">
       {isLoading ? 
-        <div className="flex-sb ac">
+        <div className="spinner">
           <Spinner size={Spinner.SIZE_LARGE} />
         </div>:<>
       <div className="flex-sb ac">
@@ -431,4 +431,4 @@ function PropertyOverview() {
   )
 }
 
-export default PropertyOverview
+export default Property
