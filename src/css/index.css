@@ -68,6 +68,11 @@ body {
   display: flex;
 }
 
+.photos-inner {
+  display: flex;
+  flex-direction: column;
+}
+
 .main {
   flex: 12;
   overflow-y: auto;
@@ -78,6 +83,10 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 2em;
+}
+
+.main-photos {
+  display: flex;
 }
 
 .aside {
@@ -117,6 +126,14 @@ body {
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
   height: 180px;
+}
+
+.pic {
+  width: 60%;
+}
+
+.file-input {
+  width: 400px;
 }
 
 .flex-sb {

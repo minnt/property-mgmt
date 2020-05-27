@@ -22,6 +22,9 @@ function TopBar() {
         <Link to="/">
           <Button className="bp3-minimal pointer" icon="info-sign" text="About" />
         </Link>
+        <Link to="/photos">
+          <Button className="bp3-minimal pointer" icon="media" text="Photos" />
+        </Link>
         {/* Search, login, settings, dark mode */}
       </Navbar.Group>
       <Navbar.Group align={Alignment.RIGHT}>

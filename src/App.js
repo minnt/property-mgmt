@@ -9,6 +9,7 @@ import Unit from './pages/Unit'
 import Tenant from './pages/Tenant'
 import Welcome from './pages/Welcome'
 import ViewAll from './pages/ViewAll'
+import Photos from './pages/Photos'
 
 // Components
 import TreeNav from './components/TreeNav'
@@ -49,6 +50,9 @@ function App() {
           </Route>
           <Route path="/all">
             <ViewAll />
+          </Route>
+          <Route path="/photos">
+            <Photos />
           </Route>
         </Switch>
 
