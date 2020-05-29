@@ -85,6 +85,17 @@ body {
   column-gap: 2em;
 }
 
+.photos-grid {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 600px;
+  width: 100%;
+  /* padding: 0px 25px 35px; */
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  column-gap: 2em;
+}
+
 .main-photos {
   display: flex;
 }
@@ -129,7 +140,7 @@ body {
 }
 
 .pic {
-  width: 60%;
+  width: 100%;
 }
 
 .file-input {
@@ -217,13 +228,17 @@ hr {
   flex: 4;
 }
 
-/* Delete one of these */
 .mt10 {
   margin-top: 10px;
 }
 
 .mt20 {
   margin-top: 20px;
+  margin-bottom: 0px;
+}
+
+.mt50 {
+  margin-top: 50px;
 }
 
 .w250px {
@@ -327,5 +342,25 @@ hr {
 
 /* Handle on hover */
 .main::-webkit-scrollbar-thumb:hover {
+  background: rgba(150, 156, 187, 0.20);
+}
+
+.photos-grid::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+/* .main::-webkit-scrollbar-track {
+} */
+
+/* Handle */
+.photos-grid::-webkit-scrollbar-thumb {
+  background: rgba(150, 156, 187, 0.10);
+  border-radius: 6px;
+  /* border: 3px solid #f1f1f1; */
+}
+
+/* Handle on hover */
+.photos-grid::-webkit-scrollbar-thumb:hover {
   background: rgba(150, 156, 187, 0.20);
 }

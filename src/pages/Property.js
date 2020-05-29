@@ -47,8 +47,8 @@ function Property() {
             propertyNewEventDate: '',
             propertyNewEventInfo: ''
           })
-          setTimeout(() => {setIsLoading(false)}, 2000);
-          // setIsLoading(false)
+          // setTimeout(() => {setIsLoading(false)}, 2000)
+          setIsLoading(false)
         })
         .catch(err => console.log(err))
     }

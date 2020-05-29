@@ -5,17 +5,16 @@ import {Button, FileInput} from "@blueprintjs/core"
 function Photos() {
 
   const [photos, setPhotos] = useState([])
+  const [filename, setFilename] = useState('Choose file...')
 
   useEffect(() => {
     axios.get('http://localhost:5000/photos/')
-    .then(res => {
-      setPhotos(res.data)
-    })
-    .catch(err => console.log(err))
+      .then(res => setPhotos(res.data))
+      .catch(err => console.log(err))
   }, [])
 
-  function handleChange() {
-    console.log('Hello')
+  function handleChange(e) {
+    setFilename(e.target.value)
   }
 
   return (
@@ -31,37 +30,46 @@ function Photos() {
 
       <div className="photos-inner">
 
-          <FileInput className="file-input" disabled={false} text="Choose file..." onInputChange={handleChange} />
-          <Button className="file-input mt10" intent="success">Submit</Button>
+          <h4>Upload:</h4>
+          <FileInput className="file-input" disabled={false} text={filename} onInputChange={handleChange} />
+          <Button className="file-input mt10" intent="success" type="submit" icon="key-enter">Submit</Button>
 
-          <div className="flex-sb">
-            <Button className="mt10" intent="warning" onClick={() => {
-              var file = "AAAAAA!!!"
-              axios.post('http://localhost:5000/photos/upload/', file)
-                .then(res => console.log(res))
-                .catch(err => console.log(err))
-            }}>Test post</Button>
-          </div>
-
-          <form action="/photos/upload" method="POST" encType="multipart/form-data">
+          {/* <form action="http://localhost:5000/photos/upload" method="POST" encType="multipart/form-data">
             <div>
               <input className="mt10" type="file" name="file" id="file" />
-              {/* <label htmlFor="file">Choose File</label> */}
             </div>
             <input className="mt10" type="submit" value="Submit" />
-          </form>
+          </form> */}
 
-          <div className="main">
+          <h4 className="mt20">View / Delete: </h4>
+          <div className="photos-grid">
             {
               photos.length > 0 ?
                 <>
                   {/* <p>There are {photos.length} photo(s)</p> */}
                   {
                     photos.map(photo => {
+                      // var isLoading = true
+                      // axios.get(`http://localhost:5000/photos/image/${photo.filename}`)
+                      //   .then(res => setPhotos(res.data))
+                      //   .catch(err => console.log(err))
+
                       return (
-                        <div key={photo._id}>
+                        <div key={photo._id} className="mt50">
                           <img className="pic" src={`http://localhost:5000/photos/image/${photo.filename}`} alt="" />
-                          {/* <Button className="mt10" intent="danger">Delete</Button> */}
+                          <Button className="mt10" fill={true} intent="danger" icon="trash" onClick={ () => {
+                            axios.delete(`http://localhost:5000/photos/files/${photo._id}?_method=DELETE`)
+                              .then(res => console.log(res))
+                              .catch(err => console.log(err))
+                          }}>
+                            Delete
+                          </Button>
+                          {/* <form method="POST" action={`http://localhost:5000/photos/files/${photo._id}?_method=DELETE`}>
+                            <button className="btn btn-danger btn-block mt-4">
+                              Delete
+                            </button>
+                            <Button className="mt10" fill={true} intent="danger">Delete</Button>
+                          </form> */}
                         </div>
                       )
                     })

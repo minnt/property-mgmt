@@ -1,19 +1,16 @@
 const router          = require('express').Router()
-const express         = require('express')
 const bodyParser      = require('body-parser')
 const path            = require('path')
 const crypto          = require('crypto')
 const mongoose        = require('mongoose')
 const multer          = require('multer')
-const GridFsStorage   = require('multer-gridfs-storage')
+const GridFSBucket    = require('multer-gridfs-storage')
 const Grid            = require('gridfs-stream')
 const methodOverride  = require('method-override')
 
-const app = express()
-
 // Middleware
-app.use(bodyParser.json())
-app.use(methodOverride('_method'))
+router.use(bodyParser.json())
+router.use(methodOverride('_method'))
 
 // Mongo URI
 const mongoURI = 'mongodb://localhost/files'
@@ -32,7 +29,7 @@ conn.once('open', () => {
 })
 
 // Create storage engine
-const storage = new GridFsStorage({
+const storage = new GridFSBucket({
   url: mongoURI,
   file: (req, file) => {
     return new Promise((resolve, reject) => {
@@ -45,7 +42,6 @@ const storage = new GridFsStorage({
           filename: filename,
           bucketName: 'uploads'
         }
-        console.log(file)
         resolve(fileInfo)
       })
     })
@@ -54,8 +50,9 @@ const storage = new GridFsStorage({
 
 const upload = multer({storage})
 
+
 // Get all the files as JSON data
-router.route('/').get((req, res) => {
+router.get('/', (req, res) => {
   gfs.files.find().toArray((err, files) => {
     if (!files || files.length === 0) {
       return res.status(404).json({
@@ -68,14 +65,13 @@ router.route('/').get((req, res) => {
 })
 
 // Upload single file
-app.post('/upload', upload.single('file'), (req, res) => {
-  // res.json({msg: 'Hello'})
-  res.json({msg: req.body})
+router.post('/upload', upload.single('file'), (req, res) => {
+  // res.json({msg: req.body})
+  res.redirect('http://localhost:3000/photos/')
 })
 
-// @route GET /image/:filename
-// @desc Display image
-router.route('/image/:filename').get((req, res) => {
+// Display image
+router.get('/image/:filename', (req, res) => {
   gfs.files.findOne({filename: req.params.filename}, (err, file) => {
     // Check if it exists
     if (!file || file.length === 0) {
@@ -94,6 +90,16 @@ router.route('/image/:filename').get((req, res) => {
         err: 'Not an image'
       })
     }
+  })
+})
+
+// Delete file
+router.delete('/files/:id', (req, res) => {
+  gfs.remove({_id: req.params.id, root: 'uploads'}, (err, gridStore) => {
+    if (err) {
+      return res.status(404).json({err: err})
+    }
+    res.redirect('http://localhost:3000/photos/')
   })
 })
 
