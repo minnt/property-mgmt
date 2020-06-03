@@ -1,35 +1,33 @@
-import React, {useState} from 'react'
+import React from 'react'
 import {Doughnut} from 'react-chartjs-2'
 
 function Chart() {
 
   var chartRef = React.createRef();
 
-  const chartData = useState({
+  const data = {
     datasets: [{
-      data: [10, 20, 30],
+      data: [6, 94],
       backgroundColor: [
-        '#106BA3',
-        '#0D8050',
-        '#C23030'
+        '#C23030',
+        '#0D8050'
       ]
     }],
     labels: [
-        'Rent',
-        'Luxuries',
-        'Gas'
+        'Vacant',
+        'Occupied',
     ]
-  })
+  }
 
-  const chartOptions = useState({
+  const options = {
     legend: {
       labels: {
-        fontColor: 'white',
-        fontFamily: 'Roboto',
+        fontColor: 'gray',
+        // fontFamily: 'Roboto',
         fontSize: 12
       }
     }
-  })
+  }
 
   // function pushData() {
   //   chartData.datasets[0].data.push(5)
@@ -38,9 +36,9 @@ function Chart() {
   // }
 
   return (
-    <div className="container-chart">
-      <Doughnut data={chartData} options={chartOptions} height={100} ref={chartRef}/>
-    </div>
+    <>
+      <Doughnut data={data} options={options} height={100} ref={chartRef}/>
+    </>
   )
 }
 

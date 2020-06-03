@@ -155,6 +155,10 @@ function TreeNav() {
       })
     })
 
+    treeNodes[2].disabled = true
+    treeNodes[3].disabled = true
+    treeNodes[4].disabled = true
+
     console.log('Tree nav updated')
     return treeNodes
   }

@@ -12,18 +12,21 @@ function TopBar() {
 
   return (
 
-    <Navbar>
+    <Navbar className="navbar-height-override">
       <Navbar.Group align={Alignment.LEFT}>
         <Navbar.Heading>Atlas</Navbar.Heading>
         <Navbar.Divider />
         <Link to="/">
           <Button className="bp3-minimal pointer" icon="home" text="Home" />
         </Link>
-        <Link to="/">
+        <Link to="/about">
           <Button className="bp3-minimal pointer" icon="info-sign" text="About" />
         </Link>
         <Link to="/photos">
           <Button className="bp3-minimal pointer" icon="media" text="Photos" />
+        </Link>
+        <Link to="/photos">
+          <Button className="bp3-minimal pointer" icon="document" text="Documents" />
         </Link>
         {/* Search, login, settings, dark mode */}
       </Navbar.Group>

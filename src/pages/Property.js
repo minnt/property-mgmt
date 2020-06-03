@@ -25,7 +25,7 @@ function Property() {
           setProperty(res.data)
 
           setInputData({
-            propertyName:         res.data.name, 
+            propertyName:         res.data.name,
             propertyNoOfUnits:    0, 
             propertyStreet:       res.data.street,
             propertyCity:         res.data.city, 

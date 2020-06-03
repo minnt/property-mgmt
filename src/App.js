@@ -10,6 +10,7 @@ import Tenant from './pages/Tenant'
 import Welcome from './pages/Welcome'
 import ViewAll from './pages/ViewAll'
 import Photos from './pages/Photos'
+import About from './pages/About'
 
 // Components
 import TreeNav from './components/TreeNav'
@@ -19,8 +20,8 @@ function App() {
 
   const {isDarkMode, toggleDarkMode} = useContext(Context)
 
+  // Dark mode key event (Shift+D)
   useEffect(() => {
-    // Dark mode key event (Shift+D)
     document.addEventListener('keydown', function(e){
       if (e.shiftKey && e.key === 'D')
         toggleDarkMode()
@@ -28,13 +29,13 @@ function App() {
   }, [toggleDarkMode])
 
   return (
-    <div className={isDarkMode ? 'bp3-dark top-container' : 'top-container'}>
+    <div className={isDarkMode ? 'bp3-dark fullpage-container' : 'fullpage-container'}>
+
       <TopBar />
       <div className='strips'></div>
+      
       <div className={isDarkMode ? 'container darkmode' : 'container lightmode'}>
-
         <TreeNav />
-
         <Switch>
           <Route exact path="/">
             <Welcome />
@@ -51,12 +52,15 @@ function App() {
           <Route path="/all">
             <ViewAll />
           </Route>
+          <Route path="/about">
+            <About />
+          </Route>
           <Route path="/photos">
             <Photos />
           </Route>
         </Switch>
-
       </div>
+
     </div>
   )
 }
