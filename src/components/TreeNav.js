@@ -77,7 +77,7 @@ function TreeNav() {
   
     // Property link
     treeNodes[0].label = (
-      <Link to='/all'>
+      <Link to='/list/all'>
         Property
       </Link>
     )
@@ -87,13 +87,21 @@ function TreeNav() {
       {
         id: 0,
         icon: "folder-close",
-        label: "Commercial",
+        label: (
+          <Link to='/list/commercial'>
+            Commercial
+          </Link>
+        ),
         childNodes: []
       },
       {
         id: 1,
         icon: "folder-close",
-        label: "Residential",
+        label: (
+          <Link to='/list/residential'>
+            Residential
+          </Link>
+        ),
         childNodes: []
       }
     )

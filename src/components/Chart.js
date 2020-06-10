@@ -1,7 +1,11 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import {Doughnut} from 'react-chartjs-2'
 
+import {Context} from '../Context'
+
 function Chart() {
+
+  let {isDarkMode} = useContext(Context)
 
   var chartRef = React.createRef();
 
@@ -15,14 +19,14 @@ function Chart() {
     }],
     labels: [
         'Vacant',
-        'Occupied',
+        'Occupied'
     ]
   }
 
   const options = {
     legend: {
       labels: {
-        fontColor: 'gray',
+        fontColor: (isDarkMode ? 'white' : 'black'),
         // fontFamily: 'Roboto',
         fontSize: 12
       }
@@ -37,7 +41,7 @@ function Chart() {
 
   return (
     <>
-      <Doughnut data={data} options={options} height={100} ref={chartRef}/>
+      <Doughnut data={data} options={options} height={150} ref={chartRef}/>
     </>
   )
 }

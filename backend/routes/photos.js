@@ -7,10 +7,12 @@ const multer          = require('multer')
 const GridFSBucket    = require('multer-gridfs-storage')
 const Grid            = require('gridfs-stream')
 const methodOverride  = require('method-override')
+const cors            = require('cors')
 
 // Middleware
 router.use(bodyParser.json())
 router.use(methodOverride('_method'))
+router.use(cors())
 
 // Mongo URI
 const mongoURI = 'mongodb://localhost/files'

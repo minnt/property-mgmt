@@ -49,7 +49,7 @@ function App() {
           <Route path="/tenant/:tenantNo">
             <Tenant />
           </Route>
-          <Route path="/all">
+          <Route path="/list/:filter">
             <ViewAll />
           </Route>
           <Route path="/about">

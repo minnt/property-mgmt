@@ -1,20 +1,26 @@
-import React, {useState, useRef, useLayoutEffect, useEffect} from 'react'
+import React, {useState, useRef, useLayoutEffect, useEffect, useContext} from 'react'
 import {useParams} from 'react-router-dom'
-import {Button, HTMLTable, InputGroup, Card, Elevation, Spinner, Icon, Tooltip, Position} from "@blueprintjs/core"
+import {Button, HTMLTable, InputGroup, Card, Elevation, Spinner, Icon, Tooltip, Position, Drawer} from "@blueprintjs/core"
+import {DatePicker, Classes} from "@blueprintjs/datetime"
 import axios from 'axios'
 import {cloneDeep} from 'lodash'
 
+import {Context} from '../Context'
 import {AppToaster} from "../utils/toaster"
 import LineChart from '../components/LineChart'
 import image from '../img/house2.jpg'
 
 function Property() {
 
-  let   {propertyId}              = useParams()
-  const [isLoading, setIsLoading] = useState(true)
-  const [isEditing, setIsEditing] = useState({address: false, utilities: false, events: false, notes: false, stats: false})
-  const [property,  setProperty]  = useState({})
-  const [inputData, setInputData] = useState({})
+  let   {propertyId}                     = useParams()
+  const {isDarkMode}                     = useContext(Context)
+  const [isLoading,     setIsLoading]    = useState(true)
+  const [isEditing,     setIsEditing]    = useState({address: false, utilities: false, events: false, notes: false, stats: false})
+  const [isDrawerOpen,  setIsDrawerOpen] = useState(false)
+  const [property,      setProperty]     = useState({})
+  const [photos,        setPhotos]       = useState([])
+  const [photoUrl,      setPhotoUrl]     = useState(image)
+  const [inputData,     setInputData]    = useState({})
 
   // Load property data from DB
   useEffect(() => {
@@ -57,6 +63,7 @@ function Property() {
 
   // If the local property data has changed then update the DB, do not fire on first render
   const firstUpdate = useRef(true)
+  // console.log(firstUpdate)
   useLayoutEffect(() => {
     if (firstUpdate.current) {
       firstUpdate.current = false
@@ -129,6 +136,42 @@ function Property() {
 
       <div className="content-inner">
         <div className="main">
+
+          <Drawer
+            className={isDarkMode ? 'bp3-dark' : ''}
+            isOpen={isDrawerOpen}
+            canEscapeKeyClose={true}
+            canOutsideClickClose={true}
+            position={Position.BOTTOM}
+            size={Drawer.SIZE_STANDARD}
+            title="Choose a new cover photo"
+            onClose={() => {setIsDrawerOpen(false)}}
+          >
+            <div style={{display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', padding: '50px', columnGap: '2em'}}>
+              {
+                photos.length > 0 ?
+                  <>
+                    {
+                      photos.map(photo => {
+                        return (
+                          <div key={photo._id} className="mt50" style={{width: '100%'}}>
+                            <img className="pic pointer" src={`http://localhost:5000/photos/image/${photo.filename}`} alt="" onClick={() => {
+                              console.log(`http://localhost:5000/photos/image/${photo.filename}`)
+                              setPhotoUrl(`http://localhost:5000/photos/image/${photo.filename}`)
+                              setIsDrawerOpen(false)
+                            }}/>
+                          </div>
+                        )
+                      })
+                    }
+                  </>
+                :
+                  <>
+                    No photos to show
+                  </>
+              }
+            </div>
+          </Drawer>
 
           <Card interactive={true} elevation={Elevation.ZERO} className="mt20" onClick={() => {
             if (!isEditing.address)
@@ -273,8 +316,11 @@ function Property() {
                   {/* Input fields for adding a new event */}
                   <p className="mt20">New:</p>
                   <div className="flex-sb ac mt10">
-                    <InputGroup className="width45" value={inputData.propertyNewEventDate} placeholder="New event date" name="propertyNewEventDate" onChange={handleChange} />
-                    <InputGroup className="width45" value={inputData.propertyNewEventInfo} placeholder="New event info" name="propertyNewEventInfo" onChange={handleChange} />
+                    <InputGroup className="width45" value={inputData.propertyNewEventDate} placeholder="New event date" name="propertyNewEventDate" onChange={handleChange}/>
+                    {/* <div style={{height: '200px', width: '200px'}}>
+                      <DatePicker className={Classes.ELEVATION_1}/>
+                    </div> */}
+                    <InputGroup className="width45" value={inputData.propertyNewEventInfo} placeholder="New event info" name="propertyNewEventInfo" onChange={handleChange}/>
                     <Tooltip content="Add" position={Position.TOP}>
                       <Icon icon='add' intent='primary' onClick={() => {
                       let newEvent = {date: inputData.propertyNewEventDate, info: inputData.propertyNewEventInfo, id: inputData.propertyEvents.length}
@@ -412,7 +458,12 @@ function Property() {
 
         <div className="aside">
           <div className="info-pane">
-            <img src={image} className="info-img" alt=""/>
+            <img src={photoUrl} className="info-img pointer" alt="" onClick={() => {
+              setIsDrawerOpen(true)
+              axios.get('http://localhost:5000/photos/')
+                .then(res => setPhotos(res.data))
+                .catch(err => console.log(err))
+            }}/>
             <div className="info-inner">
               <h1 className="heading">Info</h1>
               <p>

@@ -1,8 +1,8 @@
 import React, {useState, useEffect, useContext} from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useParams} from 'react-router-dom'
 import axios from 'axios'
 import {HTMLTable, InputGroup, Button, Tag, Tab, Tabs, 
-  NumericInput, FileInput, Dialog, Icon, Alert, Intent, Callout, HTMLSelect} from "@blueprintjs/core"
+  NumericInput, FileInput, Dialog, Icon, Alert, Intent, Callout, HTMLSelect, Spinner} from "@blueprintjs/core"
 import {AppToaster} from "../utils/toaster"
 
 import {Context} from '../Context'
@@ -10,11 +10,14 @@ import {Context} from '../Context'
 // Component to render a list of properties
 function ViewAll() {
 
+  let   {filter}                              = useParams()
+
   const {isDarkMode}                          = useContext(Context)
 
   const [properties,      setProperties]      = useState([])
   const [dispProperties,  setDispProperties]  = useState('')
   const [activeProperty,  setActiveProperty]  = useState({})
+  const [selectedTab,     setSelectedTab]     = useState(0)
 
   const [isDialogOpen,    setIsDialogOpen]    = useState(false)
   const [isAlertOpen,     setIsAlertOpen]     = useState(false)
@@ -41,8 +44,41 @@ function ViewAll() {
         .catch(err => console.log(err))
     }
     fetchData()
-  }, [])
 
+    switch (filter) {
+      case '':
+        setSelectedTab('all')
+        break
+      case 'residential':
+        setSelectedTab('res')
+        break
+      case 'commercial':
+        setSelectedTab('com')
+        break
+      default:
+        setSelectedTab('all')
+        break
+    }
+  }, [filter])
+
+  // Update the display when the selected tab changes
+  useEffect(() => {
+    switch (selectedTab) {
+      case 'all':
+        setDispProperties(properties)
+        break
+      case 'res':
+        setDispProperties(properties.filter(property => property.type === 'Residential'))
+        break
+      case 'com':
+        setDispProperties(properties.filter(property => property.type === 'Commercial'))
+        break
+      default:
+        console.log('No tab selected')
+    }
+  }, [selectedTab, properties])
+
+  // Reload property data
   function reload() {
     setIsLoading(true)
     axios.get('http://localhost:5000/residential/')
@@ -60,15 +96,18 @@ function ViewAll() {
   }
 
   function handleTabChange(event) {
-    switch(event) {
+    switch (event) {
       case 'all':
-        setDispProperties(properties)
+        //setDispProperties(properties)
+        setSelectedTab('all')
         break
       case 'res':
-        setDispProperties(properties.filter(property => property.type === 'Residential'))
+        //setDispProperties(properties.filter(property => property.type === 'Residential'))
+        setSelectedTab('res')
         break
       case 'com':
-        setDispProperties(properties.filter(property => property.type === 'Commercial'))
+        //(properties.filter(property => property.type === 'Commercial'))
+        setSelectedTab('com')
         break
       default:
         console.log('No tab selected')
@@ -175,10 +214,16 @@ function ViewAll() {
         </p>
       </Alert>
 
+      {
+        isLoading ?
+          <div className="spinner">
+            <Spinner size={Spinner.SIZE_LARGE} />
+          </div>
+        :
       <div className="flex-sb">
 
         <div className="flex-col-sb mr20" style={{height: '200px'}}>
-          <Tabs animate={true} id="navbar" vertical={true} large={false} onChange={handleTabChange}>
+          <Tabs animate={true} id="navbar" vertical={true} large={false} onChange={handleTabChange} selectedTabId={selectedTab}>
             <Tab id="all" title="All" />
             <Tab id="com" title="Commercial" />
             <Tab id="res" title="Residential" />
@@ -227,7 +272,7 @@ function ViewAll() {
             </div>
         }
 
-      </div>
+      </div>}
 
     </div>
   )

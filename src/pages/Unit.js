@@ -36,7 +36,7 @@ function Unit() {
         <h1 className="title noselect">
           Unit {unit.unitNumber}
         </h1>
-        <h2 className="subtitle noselect">
+        <h2 className="noselect" style={{fontSize: '14px'}}>
           {property.name}
         </h2>
       </div>
@@ -44,7 +44,7 @@ function Unit() {
       <div className="content-inner">
         <div className="main">
 
-          <Card interactive={true} elevation={Elevation.ZERO} className="mt20">
+          <Card interactive={true} elevation={Elevation.ZERO} className="mt20" style={{height: '200px'}}>
             <p className="address">
               {`${property.street} Apt ${unit.unitNumber}`}<br />
               {`${property.city}, ${property.state} ${property.zip}`}<br />

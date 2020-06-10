@@ -8,6 +8,13 @@
   --accent2: rgba(150, 156, 187, 0.06);
 }
 
+.cls-1 {
+  fill: rgba(180, 180, 180, 0.3);
+  stroke: #00a3e0;
+  stroke-miterlimit: 10;
+  stroke-width: 2px;
+}
+
 .lightmode {
   background-color: var(--color-light);
 }
@@ -32,10 +39,6 @@ body {
   flex-direction: column;
 }
 
-.navbar-height-override {
-  height: 4% !important;
-}
-
 .strips {
 	background: 
 		linear-gradient(45deg, 
@@ -54,7 +57,7 @@ body {
 .container {
   margin: 0;
   width: 100%;
-  height: 96%;
+  height: 95%;
   padding: 0px;
   display: inline-flex;
 }
@@ -70,7 +73,8 @@ body {
   padding-left: 20px;
   padding-right: 20px;
   padding-bottom: 20px;
-  height: 1000px;
+  /* height: 700px; */
+  height: 100%;
 }
 
 .content-inner {
@@ -86,7 +90,8 @@ body {
   flex: 12;
   overflow-y: auto;
   overflow-x: hidden;
-  height: 900px;
+  /* height: 750px; */
+  height: 100%;
   width: 100%;
   padding: 0px 25px 35px;
   display: grid;
@@ -97,17 +102,11 @@ body {
 .photos-grid {
   overflow-y: auto;
   overflow-x: hidden;
-  /* height: 900px; */
   height: 75%;
   width: 100%;
-  /* padding: 0px 25px 35px; */
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: repeat(6, 1fr);
   column-gap: 2em;
-}
-
-.main-photos {
-  display: flex;
 }
 
 .aside {
@@ -129,9 +128,9 @@ body {
 }
 
 .welcome__col {
-  width: 50%;
+  width: 70%;
   margin: auto;
-  height: 500px;
+  height: 600px;
 }
 
 .address {
@@ -157,10 +156,6 @@ body {
 
 .pic {
   width: 100%;
-}
-
-.file-input {
-  width: 400px;
 }
 
 .flex-sb {
@@ -214,10 +209,6 @@ body {
 
 .title {
   font-size: 20px;
-}
-
-.subtitle {
-  font-size: 14px;
 }
 
 hr {
@@ -288,7 +279,7 @@ hr {
 }
 
 .tree-nav {
-  width: 15%;
+  width: 16%;
   background-color: var(--accent2);
 }
 
@@ -316,11 +307,16 @@ hr {
   font-size: 14px;
 }
 
-/* Tree fix links */
+/* BLUEPRINT OVERRIDES */
 .bp3-tree-node-label > a {
   color: inherit !important;
   text-decoration: none !important;
 }
+.navbar-height-override {
+  height: 48px !important;
+}
+
+
 .bar > a {
   color: inherit !important;
   text-decoration: none !important;
@@ -333,21 +329,6 @@ hr {
 .center-text {
   text-align: center;
 }
-
-.mega-text {
-  width: 100%;
-  font-size: 30px;
-  /* color: rgb(170, 175, 248); */
-  margin-top: 30px;
-}
-
-.super-text {
-  width: 100%;
-  font-size: 22px;
-  /* color: rgb(170, 175, 248); */
-  margin: 70px;
-}
-
 
 /* SCROLLBAR */
 /* Width */
