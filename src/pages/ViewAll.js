@@ -98,15 +98,12 @@ function ViewAll() {
   function handleTabChange(event) {
     switch (event) {
       case 'all':
-        //setDispProperties(properties)
         setSelectedTab('all')
         break
       case 'res':
-        //setDispProperties(properties.filter(property => property.type === 'Residential'))
         setSelectedTab('res')
         break
       case 'com':
-        //(properties.filter(property => property.type === 'Commercial'))
         setSelectedTab('com')
         break
       default:
@@ -163,9 +160,9 @@ function ViewAll() {
           </div>
           <InputGroup type="text" value={inputData.propertyStreet} name="propertyStreet" placeholder="Street Address" onChange={handleChange}/>
           <div className="flex-sb">
-            <InputGroup type="text" className="f-4 padr-5"  placeholder="City"      name="propertyCity"   value={inputData.propertyCity}  onChange={handleChange}/>
-            <InputGroup type="text" className="f-2 padr-5"  placeholder="State"     name="propertyState"  value={inputData.propertyState} onChange={handleChange}/>
-            <InputGroup type="text" className="f-2"         placeholder="ZIP Code"  name="propertyZip"    value={inputData.propertyZip}   onChange={handleChange}/>
+            <InputGroup type="text" placeholder="City"      name="propertyCity"   value={inputData.propertyCity}  onChange={handleChange} style={{flex: 2}}/>
+            <InputGroup type="text" placeholder="State"     name="propertyState"  value={inputData.propertyState} onChange={handleChange} style={{flex: 1}}/>
+            <InputGroup type="text" placeholder="ZIP Code"  name="propertyZip"    value={inputData.propertyZip}   onChange={handleChange} style={{flex: 1}}/>
           </div>
           <FileInput disabled={true} text="Upload images..." />
           <HTMLSelect onChange={handleSelectChange} disabled={true}>
@@ -222,7 +219,7 @@ function ViewAll() {
         :
       <div className="flex-sb">
 
-        <div className="flex-col-sb mr20" style={{height: '200px'}}>
+        <div className="flex-col-sb" style={{height: '200px', marginRight: '20px'}}>
           <Tabs animate={true} id="navbar" vertical={true} large={false} onChange={handleTabChange} selectedTabId={selectedTab}>
             <Tab id="all" title="All" />
             <Tab id="com" title="Commercial" />

@@ -29,38 +29,32 @@ function App() {
   }, [toggleDarkMode])
 
   return (
-    <div className={isDarkMode ? 'bp3-dark fullpage-container' : 'fullpage-container'}>
-
+    <div className={isDarkMode ? 'bp3-dark fullpage-container darkmode' : 'fullpage-container lightmode'}>
       <TopBar />
-      <div className='strips'></div>
-      
-      <div className={isDarkMode ? 'container darkmode' : 'container lightmode'}>
-        <TreeNav />
-        <Switch>
-          <Route exact path="/">
-            <Welcome />
-          </Route>
-          <Route path="/property/:propertyId/unit/:unitNo">
-            <Unit />
-          </Route>
-          <Route path="/property/:propertyId">
-            <Property />
-          </Route>
-          <Route path="/tenant/:tenantNo">
-            <Tenant />
-          </Route>
-          <Route path="/list/:filter">
-            <ViewAll />
-          </Route>
-          <Route path="/about">
-            <About />
-          </Route>
-          <Route path="/photos">
-            <Photos />
-          </Route>
-        </Switch>
-      </div>
-
+      <TreeNav />
+      <Switch>
+        <Route exact path="/">
+          <Welcome />
+        </Route>
+        <Route path="/property/:propertyId/unit/:unitNo">
+          <Unit />
+        </Route>
+        <Route path="/property/:propertyId">
+          <Property />
+        </Route>
+        <Route path="/tenant/:tenantNo">
+          <Tenant />
+        </Route>
+        <Route path="/list/:filter">
+          <ViewAll />
+        </Route>
+        <Route path="/about">
+          <About />
+        </Route>
+        <Route path="/photos">
+          <Photos />
+        </Route>
+      </Switch>
     </div>
   )
 }

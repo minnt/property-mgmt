@@ -11,9 +11,6 @@ import javascript   from '../img/javascript.svg'
 function About() {
   return (
     <div className='content'>
-      <Callout style={{width: '200px'}}><b>Atlas Property Management</b> by Isaac B. copyright © 2020</Callout>
-      Contact: email address
-
       <p className='heading' style={{paddingTop: '20px'}}>Tech used:</p>
 
       <HTMLTable>
@@ -89,6 +86,8 @@ function About() {
         <li>Large images are resized on the backend.</li>
         <li>User login to control access.</li>
       </ul>
+
+      <Callout style={{width: '200px'}}><b>Atlas Property Management</b> by Isaac B. copyright © 2020<br />Contact: email address</Callout>
     </div>
   )
 }

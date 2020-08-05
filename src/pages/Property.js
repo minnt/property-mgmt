@@ -1,7 +1,7 @@
 import React, {useState, useRef, useLayoutEffect, useEffect, useContext} from 'react'
 import {useParams} from 'react-router-dom'
 import {Button, HTMLTable, InputGroup, Card, Elevation, Spinner, Icon, Tooltip, Position, Drawer} from "@blueprintjs/core"
-import {DatePicker, Classes} from "@blueprintjs/datetime"
+// import {DatePicker, Classes} from "@blueprintjs/datetime"
 import axios from 'axios'
 import {cloneDeep} from 'lodash'
 
@@ -456,7 +456,7 @@ function Property() {
 
         </div>
 
-        <div className="aside">
+        <div className="aside" style={{marginTop: '20px'}}>
           <div className="info-pane">
             <img src={photoUrl} className="info-img pointer" alt="" onClick={() => {
               setIsDrawerOpen(true)
