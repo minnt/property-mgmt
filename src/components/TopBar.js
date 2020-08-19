@@ -49,9 +49,6 @@ function TopBar() {
           <Link to="/photos">
             <Button className="bp3-minimal pointer" icon="media" text="Photos" />
           </Link>
-          <Link to="/photos">
-            <Button className="bp3-minimal pointer" icon="document" text="Documents" disabled={true}/>
-          </Link>
         </Navbar.Group>
         <Navbar.Group align={Alignment.RIGHT}>
           <InputGroup type="search" placeholder="Search..."/>

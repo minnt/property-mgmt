@@ -11,6 +11,10 @@ function Photos() {
   const [photos, setPhotos]               = useState([])
   const [selectedPhoto, setSelectedPhoto] = useState('http://localhost:5000/photos/image/224be0607c922e57c58d927d37fda409.png')
   const [isDialogOpen,  setIsDialogOpen]  = useState(false)
+  const [file, setFile] = useState(null)
+  const [error, setError] = useState(null)
+
+  const types = ['image/png', 'image/jpeg']
   
   // const [filename, setFilename] = useState('Choose file...')
 
@@ -31,6 +35,19 @@ function Photos() {
   //     .catch(err => console.log(err))
   // }
 
+  const handleChange = (e) => {
+    let selected = e.target.files[0]
+    console.log(selected)
+
+    if (selected && types.includes(selected.type)) {
+      setFile(selected)
+      setError('')
+    } else {
+      setFile(null)
+      setError('Please select an image file (PNG or JPEG)')
+    }
+  }
+
   return (
     <div className="content">
 
@@ -42,15 +59,15 @@ function Photos() {
 
       <hr />
 
-      <h4>Upload: (NEEDS ONCHANGE)</h4>
+      <h4>Upload:</h4>
       <div style={{width: '300px'}}>
         <form action="http://localhost:5000/photos/upload" method="POST" encType="multipart/form-data">
-          <label class="bp3-file-input bp3-fill">
-            <input type="file" name="file" id="file"/>
-            <span class="bp3-file-upload-input">Choose file...</span>
+          <label className="bp3-file-input bp3-fill">
+            <input type="file" name="file" id="file" onChange={handleChange}/>
+            <span className="bp3-file-upload-input">{ file ? `${file.name}` : 'Choose file...' }</span>
           </label>
           <button className="bp3-button bp3-intent-success bp3-fill bp3-outlined mt10" type="submit">
-              Submit
+            Submit
           </button>
         </form>
       </div>

@@ -21,6 +21,7 @@ function Property() {
   const [photos,        setPhotos]       = useState([])
   const [photoUrl,      setPhotoUrl]     = useState(image)
   const [inputData,     setInputData]    = useState({})
+  const [lastUpdate,    setLastUpdate]   = useState('')
 
   // Load property data from DB
   useEffect(() => {
@@ -29,6 +30,17 @@ function Property() {
         .then(res => {
           console.log('Loading properties data')
           setProperty(res.data)
+
+          var myDate = new Date(res.data.updatedOn)
+          var month = myDate.getMonth()
+          var date = myDate.getDate()
+          var day = myDate.getDay()
+          var hours = myDate.getHours()
+          var minutes = myDate.getMinutes()
+          var year = myDate.getFullYear()
+          const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+          const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+          setLastUpdate(`${hours}:${minutes} ${days[day]} ${months[month]} ${date} ${year}`)
 
           setInputData({
             propertyName:         res.data.name,
@@ -130,6 +142,7 @@ function Property() {
         <h1 className="title noselect">
           {property.name}
         </h1>
+        <h5>Last edited: {lastUpdate}</h5>
       </div>
       
       <hr />
@@ -252,9 +265,14 @@ function Property() {
                         internet: inputData.propertyInternet,
                         lawncare: inputData.propertyLawncare
                       }
+
+                      var myDate = new Date()
+                      var timestamp = myDate.getTime()
+
                       var newProperty = {
                         ...property,
-                        utilities: {...newUtilities}
+                        utilities: {...newUtilities},
+                        updatedOn: timestamp
                       }
                       setProperty(newProperty)
                     }}/>

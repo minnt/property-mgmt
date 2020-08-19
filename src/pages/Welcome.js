@@ -1,14 +1,27 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
 import {Card, InputGroup, ControlGroup, Button, Callout, Elevation, Divider, HTMLTable} from "@blueprintjs/core"
 import anime from 'animejs'
+import axios from 'axios'
 
 import Chart from '../components/Chart'
 import LineChart from '../components/LineChart'
 
 function Welcome() {
+  const [properties, setProperties] = useState([])
 
   useEffect(() => {
+
+    function fetchData() {
+      axios.get(`http://localhost:5000/residential/`)
+        .then(res => {
+          setProperties(res.data)
+        })
+        .catch(err => console.log(err))
+    }
+    fetchData()
+
+    // Animate logo svg
     anime({
       targets: '.path',
       strokeDashoffset: [anime.setDashoffset, 0],
@@ -34,59 +47,28 @@ function Welcome() {
 
         <h1 className="heading" style={{gridArea: 'text-recent', margin: 'auto'}}>Recently updated:</h1>
 
-        <div className="flex-sb" style={{gridArea: 'info'}}>
-          <Callout icon="info-sign">
-            Use the tree menu to the left to navigate properties or search below. [recently updated, recent photos]
-          </Callout>
+        <div className="flex-sa" style={{gridArea: 'recent-update'}}>
+          <HTMLTable>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Date Updated</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                properties.sort((a, b) => new Date(b.updatedOn) - new Date(a.updatedOn)).map(property => {
+                  return (
+                    <tr key={property.name}>
+                      <td>{property.name}</td>
+                      <td>{property.updatedOn}</td>
+                    </tr>
+                  )
+                })
+              }
+            </tbody>
+          </HTMLTable>
         </div>
-
-        <div className="flex-sb" style={{gridArea: 'prop-cat'}}>
-          <Card elevation={Elevation.TWO}>
-            <p>Click below to view your respective properties.</p>
-            <ControlGroup fill={false} vertical={false} style={{display: 'flex', justifyContent: 'center'}}>
-              <Link to='/list/all'><Button>All</Button></Link>
-              <Link to='/list/residential'><Button>Residential</Button></Link>
-              <Link to='/list/commercial'><Button>Commercial</Button></Link>
-            </ControlGroup>
-            <Divider />
-            Recently updated:
-            <HTMLTable>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Shady Oaks</td>
-                </tr>
-              </tbody>
-            </HTMLTable>
-          </Card>
-        </div>
-
-        <div style={{gridArea: 'search'}}>
-          <Card elevation={Elevation.TWO}>
-            <div className="flex-sb">
-              <div className="flex-sb" style={{flexDirection: 'column'}}>
-                Search properties:
-                <InputGroup className="mt10" type="search" placeholder="Search..." style={{width: '200px'}}/>
-              </div>
-              <Divider />
-              <div className="flex-sb" style={{flexDirection: 'column'}}>
-                Search tenants:
-                <InputGroup className="mt10" type="search" placeholder="Search..." style={{width: '200px'}}/>
-              </div>
-            </div>
-          </Card>
-        </div>
-
-        {/* <div style={{gridArea: 'search-tenant'}}>
-          <Card elevation={Elevation.TWO}>
-            Search tenants:
-            <InputGroup className="mt10" type="search" placeholder="Search..." style={{width: '300px'}}/>
-          </Card>
-        </div> */}
 
         <h1 className="heading" style={{gridArea: 'text-info', margin: 'auto'}}>Info at a glance:</h1>
 

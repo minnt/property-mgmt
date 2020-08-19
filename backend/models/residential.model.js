@@ -12,7 +12,8 @@ const Residential = new mongoose.Schema({
   events:     {type: Array,   default: []},
   utilities:  {type: Object,  default: {}},
   notes:      {type: Array,   default: []},
-  units:      {type: Array,   default: []}
+  units:      {type: Array,   default: []},
+  updatedOn:  {type: Date,    default: null}
 })
 
 module.exports = mongoose.model('Residential', Residential, 'residential')  // 3rd parameter is collection name

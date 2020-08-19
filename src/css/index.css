@@ -148,12 +148,11 @@ body {
   display: grid;
   grid-template: 1fr 0.3fr 1fr 1fr 0.3fr 1fr / 1fr 1fr;
   grid-template-areas:
-    "title        title"
-    "text-recent  text-recent"
-    "info         prop-cat"
-    "search       prop-cat"
-    "text-info    text-info"
-    "donut-chart  line-chart";
+    "title          title"
+    "text-recent    text-recent"
+    "recent-update  recent-update"
+    "text-info      text-info"
+    "donut-chart    line-chart";
   column-gap: 2em;
   row-gap: 2em;
 }
