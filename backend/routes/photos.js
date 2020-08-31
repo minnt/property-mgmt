@@ -27,7 +27,7 @@ conn.once('open', () => {
   // Init stream
   gfs = Grid(conn.db, mongoose.mongo)
   gfs.collection('uploads')
-  console.log('Stream initialized!')
+  console.log('File upload stream initialized!')
 })
 
 // Create storage engine

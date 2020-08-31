@@ -61,7 +61,7 @@ function TreeNav() {
 
   // Turn data into a format the tree nav can use
   function generateMenu(pData) {
-    let menuData = ['Properties', 'Tenants', 'Documents', 'Budget', 'Service Providers']
+    let menuData = ['Properties', 'Tenants']
     let treeNodes = []
   
     // Top level
@@ -163,9 +163,8 @@ function TreeNav() {
       })
     })
 
-    treeNodes[2].disabled = true
-    treeNodes[3].disabled = true
-    treeNodes[4].disabled = true
+    // To disable a node, example:
+    // treeNodes[2].disabled = true
 
     console.log('Tree nav updated')
     return treeNodes

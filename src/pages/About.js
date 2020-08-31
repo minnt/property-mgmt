@@ -1,12 +1,10 @@
 import React from 'react'
 
-import {Callout, HTMLTable} from "@blueprintjs/core"
+import {HTMLTable} from "@blueprintjs/core"
 
-import express      from '../img/express.svg'
 import react        from '../img/react.svg'
 import mongodb      from '../img/mongodb.svg'
 import nodejs       from '../img/nodejs.svg'
-import javascript   from '../img/javascript.svg'
 
 function About() {
   return (
@@ -17,6 +15,7 @@ function About() {
         <thead>
           <tr>
             <th>Tech</th>
+            <th></th>
             <th>Description</th>
             <th>URL</th>
           </tr>
@@ -24,54 +23,54 @@ function About() {
         <tbody>
           <tr>
             <td>React</td>
+            <td><img src={react} alt='' width={20} /></td>
             <td>A JavaScript library for building user interfaces</td>
             <td><a href="https://reactjs.org/">reactjs.org</a></td>
           </tr>
           <tr>
             <td>NodeJS</td>
+            <td><img src={nodejs} alt='' width={20} /></td>
             <td>Javascript runtime</td>
             <td><a href="https://nodejs.org/en/">nodejs.org/en</a></td>
           </tr>
           <tr>
             <td>MongoDB</td>
+            <td><img src={mongodb} alt='MongoDB' width={60} /></td>
             <td>A document database stores data in JSON-like documents</td>
             <td><a href="https://www.mongodb.com/">mongodb.com</a></td>
           </tr>
           <tr>
             <td>Express</td>
+            <td></td>
             <td>Fast, unopinionated, minimalist web framework for Node.js</td>
             <td><a href="https://expressjs.com/">expressjs.com</a></td>
           </tr>
           <tr>
             <td>BlueprintJS</td>
+            <td></td>
             <td>CSS framework and UI toolkit</td>
             <td><a href="https://blueprintjs.com/">blueprintjs.com</a></td>
           </tr>
           <tr>
             <td>Multer</td>
+            <td></td>
             <td>Node.js middleware for handling `multipart/form-data`</td>
             <td><a href="https://github.com/expressjs/multer">github.com/expressjs/multer</a></td>
           </tr>
           <tr>
             <td>ChartJS</td>
+            <td></td>
             <td>Simple yet flexible JavaScript charting</td>
             <td><a href="https://www.chartjs.org/">chartjs.org</a></td>
           </tr>
           <tr>
             <td>AnimeJS</td>
+            <td></td>
             <td>A lightweight JavaScript animation library with a simple, yet powerful API</td>
             <td><a href="https://animejs.com/">animejs.com</a></td>
           </tr>
         </tbody>
       </HTMLTable>
-
-      <Callout style={{display: 'flex', width: '700px', justifyContent: 'space-around'}}>
-        <img src={express}    alt='' width={100} />
-        <img src={react}      alt='' width={100} />
-        <img src={mongodb}    alt='' width={100} />
-        <img src={nodejs}     alt='' width={100} />
-        <img src={javascript} alt='' width={100} />
-      </Callout>
 
       <p className='heading' style={{paddingTop: '30px'}}>Features:</p>
       <ul>
@@ -87,7 +86,12 @@ function About() {
         <li>User login to control access.</li>
       </ul>
 
-      <Callout style={{width: '200px'}}><b>Atlas Property Management</b> by Isaac B. copyright © 2020<br />Contact: email address</Callout>
+      <div className="flex-sa" style={{paddingTop: '30px'}}>
+        <p style={{color: 'rgba(0, 0, 0, 0.4)'}}>
+          <b>Atlas Property Management</b> by Isaac B. copyright © 2020<br />
+          Contact: email address
+        </p>
+      </div>
     </div>
   )
 }

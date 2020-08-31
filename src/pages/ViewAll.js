@@ -1,8 +1,7 @@
 import React, {useState, useEffect, useContext} from 'react'
 import {Link, useParams} from 'react-router-dom'
 import axios from 'axios'
-import {HTMLTable, InputGroup, Button, Tag, Tab, Tabs, 
-  NumericInput, FileInput, Dialog, Icon, Alert, Intent, Callout, HTMLSelect, Spinner} from "@blueprintjs/core"
+import {HTMLTable, InputGroup, Button, Tag, Tab, Tabs, Dialog, Alert, Intent, Callout, HTMLSelect, Spinner} from "@blueprintjs/core"
 import {AppToaster} from "../utils/toaster"
 
 import {Context} from '../Context'
@@ -111,7 +110,7 @@ function ViewAll() {
     }
   }
 
-  function handleSelectChange(event) {
+  const handleSelectChange = (event) => {
     let value = event.currentTarget.value
     setInputData(prevInputData => ({...prevInputData, propertyType: value}))
   }
@@ -155,23 +154,26 @@ function ViewAll() {
       >
         <div className="dialog mt20">
           <InputGroup type="text" value={inputData.propertyName} name="propertyName" placeholder="Name of property" onChange={handleChange}/>
-          <div className="flex-sb">
-            Number of units: <NumericInput disabled={true} name="propertyNoOfUnits"/>
-          </div>
+          <hr style={{ width: '100%'}}/>
           <InputGroup type="text" value={inputData.propertyStreet} name="propertyStreet" placeholder="Street Address" onChange={handleChange}/>
           <div className="flex-sb">
-            <InputGroup type="text" placeholder="City"      name="propertyCity"   value={inputData.propertyCity}  onChange={handleChange} style={{flex: 2}}/>
-            <InputGroup type="text" placeholder="State"     name="propertyState"  value={inputData.propertyState} onChange={handleChange} style={{flex: 1}}/>
-            <InputGroup type="text" placeholder="ZIP Code"  name="propertyZip"    value={inputData.propertyZip}   onChange={handleChange} style={{flex: 1}}/>
+            <div style={{ marginRight: '10px' }}>
+              <InputGroup type="text" placeholder="City"      name="propertyCity"   value={inputData.propertyCity}  onChange={handleChange} />
+            </div>
+            <div style={{ marginRight: '10px' }}>
+              <InputGroup type="text" placeholder="State"     name="propertyState"  value={inputData.propertyState} onChange={handleChange} />
+            </div>
+            <div>
+              <InputGroup type="text" placeholder="ZIP Code"  name="propertyZip"    value={inputData.propertyZip}   onChange={handleChange} />
+            </div>
           </div>
-          <FileInput disabled={true} text="Upload images..." />
-          <HTMLSelect onChange={handleSelectChange} disabled={true}>
+          <HTMLSelect onChange={handleSelectChange} disabled={false} className="width50">
             <option>Residential</option>
             <option>Commercial</option>
           </HTMLSelect>
           <Callout icon="info-sign">More detailed information can be entered on the overview page for this property, after creation.</Callout>
-          <div className="width50">
-            <Button icon="floppy-disk" text="Save" onClick={() => {
+          <div>
+            <Button icon="floppy-disk" text="Save" intent="success" onClick={() => {
               var newProperty = {
                 name:   inputData.propertyName,
                 street: inputData.propertyStreet,
@@ -233,7 +235,7 @@ function ViewAll() {
             <HTMLTable className="width100" bordered={true} striped={true} condensed={true}>
               <thead>
                 <tr>
-                  <th>Name<Icon icon="caret-up" /></th>
+                  <th>Name</th>
                   <th>Type</th>
                   <th># of Units</th>
                   <th>City</th>

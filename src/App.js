@@ -1,7 +1,7 @@
-import React, {useEffect, useContext} from 'react'
-import {Switch, Route} from 'react-router-dom'
+import React, { useEffect, useContext } from 'react'
+import { Switch, Route } from 'react-router-dom'
 
-import {Context} from './Context'
+import { Context } from './Context'
 
 // Pages
 import Property from './pages/Property'

@@ -50,6 +50,7 @@ router.route('/update/:id').post((req, res) => {
       property.utilities = req.body.utilities
       property.events = req.body.events
       property.updatedOn = req.body.updatedOn
+      property.coverPhoto = req.body.coverPhoto
       // { name, street, city, state, zip } = req.body
       property.save()
         .then(() => res.json('Property updated!'))

@@ -5,8 +5,8 @@
 }
 
 :root {
-  --color-dark: #202B33;
-  --color-light: rgb(252, 252, 252);
+  --color-dark: hsl(205, 23%, 16%);
+  --color-light: rgb(240, 240, 240);
 
   --accent: rgba(150, 156, 187, 0.10);
   --accent2: rgba(150, 156, 187, 0.06);
@@ -100,6 +100,7 @@ body {
 .tree-nav {
   grid-area: tree-nav;
   background-color: var(--accent2);
+  border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 .photos-grid {
@@ -113,10 +114,21 @@ body {
 }
 
 .aside {
-  flex: 2;
+  flex: 3;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+}
+
+.address-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(4, 1fr);
+  grid-template-areas: 
+  "streetLabel  streetForm"
+  "cityLabel    cityForm"
+  "stateLabel   stateForm"
+  "zipLabel     zipForm"
 }
 
 .spinner {
@@ -126,13 +138,13 @@ body {
 
 .dialog {
   padding: 30px;
-  width: 400px;
-  height: 400px;
+  width: 450px;
+  height: 380px;
   margin-left: auto;
   margin-right: auto;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: space-between;
 }
 
 .welcome-col {
@@ -268,6 +280,10 @@ hr {
   text-decoration: none !important;
 }
 
+.inherit-color {
+  color: inherit !important;
+}
+
 .bar > a {
   color: inherit !important;
   text-decoration: none !important;
@@ -298,4 +314,16 @@ hr {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(150, 156, 187, 0.20);
+}
+
+.img-text-container {
+  position: relative;
+  text-align: center;
+}
+
+.img-bottom-text {
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%);
 }

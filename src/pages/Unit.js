@@ -142,19 +142,62 @@ function Unit() {
           <div className="info-pane">
             <div className="info-inner">
               <h1 className="heading">Info</h1>
-              <p>
-                {unit.bedrooms} bedroom / {unit.bathrooms} bath<br />
-                {unit.tenants.length} tenants<br />
-                {unit.sqFt} square feet<br />
-                Rent is ${unit.rent} per month<br />
-                {unit.keys} keys supplied<br />
+              {/* <p>
+                <i className="fas fa-building"></i> {unit.bedrooms} bedroom / {unit.bathrooms} bath<br />
+                <i className="fas fa-user-friends"></i> {unit.tenants.length} tenants<br />
+                <i className="fas fa-ruler"></i> {unit.sqFt} square feet<br />
+                <i className="fas fa-hand-holding-usd"></i> Rent is ${unit.rent} per month<br />
+                <i className="fas fa-key"></i> {unit.keys} keys supplied<br />
                 {
                   unit.pets ?
-                    "Pets allowed"
+                    <>
+                      <i className="fas fa-paw"></i>
+                      &nbsp;Pet deposit on file
+                    </>
                   :
-                    "Pets not allowed"
+                    <>
+                      <i className="fas fa-paw"></i>
+                      &nbsp;No pet deposit on file
+                    </>
                 }
-              </p>
+              </p> */}
+              <HTMLTable bordered={false}>
+                <tbody>
+                  <tr>
+                    <td><i className="fas fa-building"></i></td>
+                    <td>{unit.bedrooms} bedroom / {unit.bathrooms} bath</td>
+                  </tr>
+                  <tr>
+                    <td><i className="fas fa-user-friends"></i></td>
+                    <td>{unit.tenants.length} tenants</td>
+                  </tr>
+                  <tr>
+                    <td><i className="fas fa-ruler"></i></td>
+                    <td>{unit.sqFt} square feet</td>
+                  </tr>
+                  <tr>
+                    <td><i className="fas fa-hand-holding-usd"></i></td>
+                    <td>Rent is ${unit.rent} per month</td>
+                  </tr>
+                  <tr>
+                    <td><i className="fas fa-key"></i></td>
+                    <td>{unit.keys} keys supplied</td>
+                  </tr>
+                  <tr>
+                    <td><i className="fas fa-paw"></i></td>
+                    {
+                      unit.pets ?
+                        <td>
+                          Pet deposit on file
+                        </td>
+                      :
+                        <td>
+                          No pet deposit on file
+                        </td>
+                    }
+                  </tr>
+                </tbody>
+              </HTMLTable>
             </div>
           </div>
         </div>
