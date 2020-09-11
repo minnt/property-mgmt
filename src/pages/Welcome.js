@@ -44,7 +44,7 @@ function Welcome() {
           <h1 className="width100">
             Welcome to<br />
             Atlas Property Management
-            <hr />
+            <hr className="divider" />
           </h1>
         </div>
 

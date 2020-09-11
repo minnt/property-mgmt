@@ -139,7 +139,7 @@ function ViewAll() {
         All Properties
       </h1>
 
-      <hr />
+      <hr className="divider" />
 
       {/* Dialog to add a new property and the accompanying info */}
       <Dialog 

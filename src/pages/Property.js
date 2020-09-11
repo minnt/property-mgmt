@@ -152,6 +152,10 @@ function Property() {
     setEditText(event)
   }
 
+  const handleConfirm = (event) => {
+    console.log('Confirmed')
+  }
+
   const handleChangeNotes = (event, index) => {
     const value = event.target.value
     let newPropertyNotes = [...inputData.propertyNotes]
@@ -204,7 +208,7 @@ function Property() {
         </div>
       </div>
       
-      <hr />
+      <hr className="divider" />
 
       <div className="content-inner">
         <div className="main">
@@ -314,13 +318,6 @@ function Property() {
             {
               isEditing.utilities ?
                 <>
-                  {/* <FormGroup label="Power: " inline={true} className="mt10">
-                    <InputGroup id="power-input" placeholder={property.utilities.power}/>
-                  </FormGroup>
-                  <FormGroup label="Gas: " inline={true} className="mt10">
-                    <InputGroup id="gas-input" placeholder={property.utilities.gas}/>
-                  </FormGroup> */}
-                  
                   <div style={{ display: 'flex', alignItems: 'center' }}>
                     <div style={{ width: '30px' }}>
                       <i className="fas fa-plug" style={{ color: 'rgb(247, 194, 47)', paddingRight: '10px'}}></i>
@@ -463,13 +460,25 @@ function Property() {
               isEditing.events ?
                 <>
                   {/* Input fields for editing events */}
-                  <p>Edit:</p>
+                  
+                  <div className="flex-sb" style={{ alignItems: 'center' }}>
+                    <p>Edit</p>
+                    {/* <hr style={{ width: '90%', borderTop: '1px solid rgba(0, 0, 0, 0.4)', borderBottom: '0px' }} /> */}
+                    <hr className="divider" style={{ width: '90%' }}/>
+                  </div>
                   {
                     inputData.propertyEvents.map((propertyEvent, index) => {
                       return (
-                        <div key={propertyEvent.id} className="flex-sb ac mt10">
-                          <InputGroup small={true} fill={true} value={propertyEvent.date} onChange={(e) => {handleChangeEvents(e, index, 'date')}} />
-                          <div style={{ width: '10px' }}></div>
+                        <div key={propertyEvent.id} className="flex-sb mt10" style={{ alignItems: 'center' }}>
+                          {/* <InputGroup small={true} fill={true} value={propertyEvent.date} onChange={(e) => {handleChangeEvents(e, index, 'date')}} />
+                          <div style={{ width: '10px' }}></div> */}
+                          <div style={{ marginRight: '5px', width: '240px' }}>
+                            <Popover autoFocus={false}>
+                              <Button intent={Intent.PRIMARY} outlined={true} text={propertyEvent.date} icon="timeline-events" small={true} />
+                              <DatePicker className={Classes.ELEVATION_1} highlightCurrentDay={true} onChange={handleDateChange} />
+                            </Popover>
+                          </div>
+
                           <InputGroup small={true} fill={true} value={propertyEvent.info} onChange={(e) => {handleChangeEvents(e, index, 'info')}} />
                           <div style={{ marginLeft: '15px' }}>
                             <Tooltip content="Delete" position={Position.TOP}>
@@ -488,12 +497,15 @@ function Property() {
                   }
 
                   {/* Input fields for adding a new event */}
-                  <p className="mt20">New:</p>
+                  <div className="flex-sb mt20" style={{ alignItems: 'center' }}>
+                    <p>New</p>
+                    <hr className="divider" style={{ width: '90%' }} />
+                  </div>
                   <div className="flex-sb mt10">
                     {/* <InputGroup className="width45" value={inputData.propertyNewEventDate} placeholder="New event date" name="propertyNewEventDate" onChange={handleChange}/> */}
-                    <div style={{ marginRight: '5px', width: '240px'}}>
+                    <div style={{ marginRight: '5px', width: '240px' }}>
                       <Popover autoFocus={false}>
-                        <Button intent={Intent.PRIMARY} text={selectedDate} icon="timeline-events" />
+                        <Button intent={Intent.PRIMARY} outlined={true} text={selectedDate} icon="timeline-events" />
                         <DatePicker className={Classes.ELEVATION_1} highlightCurrentDay={true} onChange={handleDateChange} />
                       </Popover>
                     </div>
@@ -591,7 +603,9 @@ function Property() {
                     inputData.propertyNotes.map((note, index) => {
                       return (
                         <div key={note.id} className="flex-sb ac mt10">
-                          <InputGroup key={note.id} className="width45" small={true} value={note.info} onChange={(e) => {handleChangeNotes(e, index)}}/>
+                          <div style={{ marginRight: '25px', width: '100%' }}>
+                            <InputGroup key={note.id} className="" small={true} fill={true} value={note.info} onChange={(e) => {handleChangeNotes(e, index)}}/>
+                          </div>
                           <Tooltip content="Delete" position={Position.TOP}>
                             <Icon icon='delete' intent='danger' onClick={console.log('click')} />
                           </Tooltip>
@@ -600,9 +614,11 @@ function Property() {
                     })
                   }
                   <p className="mt20">New:</p>
-                  <div className="flex-sb ac mt10">
-                    <InputGroup className="mt10 width45" placeholder="New note" />
-                    <Tooltip content="Delete" position={Position.TOP}>
+                  <div className="flex-sb mt10" style={{ alignItems: 'center' }}>
+                    <div style={{ marginRight: '25px', width: '100%' }}>
+                      <InputGroup className="mt10" fill={true} placeholder="New note" />
+                    </div>
+                    <Tooltip content="Add" position={Position.TOP}>
                       <Icon icon='add' intent='primary' onClick={console.log('click')} />
                     </Tooltip>
                   </div>
@@ -681,7 +697,7 @@ function Property() {
                     <td>
                       <div className="address-grid">
                         <div style={{ gridArea: 'streetLabel' }}> Street:</div>
-                        <div style={{ gridArea: 'streetForm' }}>  <EditableText multiline={false} value={inputData.propertyStreet} minWidth={150} /></div>
+                        <div style={{ gridArea: 'streetForm' }}>  <EditableText multiline={false} value={inputData.propertyStreet} minWidth={150} onConfirm={handleConfirm} /></div>
                         <div style={{ gridArea: 'cityLabel' }}>   City:</div>
                         <div style={{ gridArea: 'cityForm' }}>    <EditableText multiline={false} value={inputData.propertyCity} minWidth={100}/></div>
                         <div style={{ gridArea: 'stateLabel' }}>  State:</div>

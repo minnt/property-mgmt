@@ -45,7 +45,7 @@ function Photos() {
         </h1>
       </div>
 
-      <hr />
+      <hr className="divider" />
 
       <h4>Upload:</h4>
       <div style={{width: '300px'}}>
