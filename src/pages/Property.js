@@ -4,7 +4,7 @@ import { Button, HTMLTable, InputGroup, Card, Elevation, Spinner, Icon, Tooltip,
 import { DatePicker, Classes } from '@blueprintjs/datetime'
 import axios from 'axios'
 import { cloneDeep } from 'lodash'
-// import { motion, AnimatePresence } from 'framer-motion'
+// import { motion } from 'framer-motion'
 
 import { Context } from '../Context'
 import { AppToaster } from '../utils/toaster'
@@ -13,6 +13,7 @@ import { months, days } from '../utils/monthsDays'
 // Components
 import BlockControls from '../components/BlockControls'
 import LineChart from '../components/LineChart'
+import Display from '../components/Display'
 
 // Images
 import image from '../img/default_house.jpg'
@@ -177,6 +178,211 @@ function Property() {
     }
   }
 
+  const jsxDispUtility = () => {
+    return <HTMLTable className="width100" bordered={false} striped={false} condensed={true}>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th></th>
+          <th>Provider</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Power</td>
+          <td><i className="fas fa-plug"      style={{ color: 'rgb(247, 194, 47)' }}></i></td>
+          <td><i>{property.utilities.power}</i></td>
+        </tr>
+        <tr>
+          <td>Gas</td>
+          <td><i className="fas fa-fire"      style={{ color: 'rgb(247, 127, 47)' }}></i></td>
+          <td><i>{property.utilities.gas}</i></td>
+        </tr>
+        <tr>
+          <td>Water</td>
+          <td><i className="fas fa-faucet"    style={{ color: 'rgb(47, 167, 247)' }}></i></td>
+          <td><i>{property.utilities.water}</i></td>
+        </tr>
+        <tr>
+          <td>Sewage</td>
+          <td><i className="fas fa-toilet"    style={{ color: '#BFCCD6' }}></i></td>
+          <td><i>{property.utilities.sewage}</i></td>
+        </tr>
+        <tr>
+          <td>Waste</td>
+          <td><i className="fas fa-trash-alt" style={{ color: '#8A9BA8' }}></i></td>
+          <td><i>{property.utilities.waste}</i></td>
+        </tr>
+        <tr>
+          <td>Internet</td>
+          <td><i className="fas fa-wifi"      style={{ color: '#00B3A4' }}></i></td>
+          <td><i>{property.utilities.internet}</i></td>
+        </tr>
+        <tr>
+          <td>Lawncare</td>
+          <td><i className="fas fa-leaf"      style={{ color: 'rgb(117, 247, 47)' }}></i></td>
+          <td><i>{property.utilities.lawncare}</i></td>
+        </tr>
+      </tbody>
+    </HTMLTable>
+  }
+
+  const jsxEditUtility = () => {
+    return <>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div style={{ width: '30px' }}>
+          <i className="fas fa-plug" style={{ color: 'rgb(247, 194, 47)', paddingRight: '10px'}}></i>
+        </div>
+        <InputGroup value={inputData.propertyPower} fill={true} name="propertyPower" onChange={handleChange} />
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+        <div style={{ width: '30px' }}>
+          <i className="fas fa-fire" style={{ color: 'rgb(247, 127, 47)', paddingRight: '10px'}}></i>
+        </div>
+        <InputGroup value={inputData.propertyGas} fill={true} name="propertyGas" onChange={handleChange} />
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+        <div style={{ width: '30px' }}>
+          <i className="fas fa-faucet" style={{ color: 'rgb(47, 167, 247)', paddingRight: '10px'}}></i>
+        </div>
+        <InputGroup value={inputData.propertyWater} fill={true} name="propertyWater" onChange={handleChange} />
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+        <div style={{ width: '30px' }}>
+          <i className="fas fa-toilet" style={{ color: '#BFCCD6', paddingRight: '10px'}}></i>
+        </div>
+        <InputGroup value={inputData.propertySewage} fill={true} name="propertySewage" onChange={handleChange} />
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+        <div style={{ width: '30px' }}>
+          <i className="fas fa-trash-alt" style={{ color: '#8A9BA8', paddingRight: '10px'}}></i>
+        </div>
+        <InputGroup value={inputData.propertyWaste} fill={true} name="propertyWaste" onChange={handleChange} />
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+        <div style={{ width: '30px' }}>
+          <i className="fas fa-wifi" style={{ color: '#00B3A4', paddingRight: '10px'}}></i>
+        </div>
+        <InputGroup value={inputData.propertyInternet} fill={true} name="propertyInternet" onChange={handleChange} />
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+        <div style={{ width: '30px' }}>
+          <i className="fas fa-leaf" style={{ color: 'rgb(117, 247, 47)', paddingRight: '10px'}}></i>
+        </div>
+        <InputGroup value={inputData.propertyLawncare} fill={true} name="propertyLawncare" onChange={handleChange} />
+      </div>
+    </>
+  }
+
+  const jsxDispEvents = () => {
+    return <>
+    {
+      property.events.length > 0 ?
+        // Render events as a table
+        <HTMLTable className="width100" bordered={true} striped={true} condensed={true}>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Event Info</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              property.events.map(event => {
+                return (
+                  <tr key={event.id}>
+                    <td>{event.date}</td>
+                    <td>{event.info}</td>
+                  </tr>
+                )
+              })
+            }
+          </tbody>
+        </HTMLTable>
+      :
+        <>No events</>
+    }
+  </>
+  }
+
+  const jsxEditEvents = () => {
+    return <>
+    <div className="flex-sb" style={{ alignItems: 'center' }}>
+      <p>Edit</p>
+      {/* <hr style={{ width: '90%', borderTop: '1px solid rgba(0, 0, 0, 0.4)', borderBottom: '0px' }} /> */}
+      <hr className="divider" style={{ width: '90%' }}/>
+    </div>
+    {
+      inputData.propertyEvents.map((propertyEvent, index) => {
+        return (
+          <div key={propertyEvent.id} className="flex-sb mt10" style={{ alignItems: 'center' }}>
+            {/* <InputGroup small={true} fill={true} value={propertyEvent.date} onChange={(e) => {handleChangeEvents(e, index, 'date')}} />
+            <div style={{ width: '10px' }}></div> */}
+            <div style={{ marginRight: '5px', width: '240px' }}>
+              <Popover autoFocus={false}>
+                <Button intent={Intent.PRIMARY} outlined={true} text={propertyEvent.date} icon="timeline-events" small={true} />
+                <DatePicker className={Classes.ELEVATION_1} highlightCurrentDay={true} onChange={handleDateChange} />
+              </Popover>
+            </div>
+
+            <InputGroup small={true} fill={true} value={propertyEvent.info} onChange={(e) => {handleChangeEvents(e, index, 'info')}} />
+            <div style={{ marginLeft: '15px' }}>
+              <Tooltip content="Delete" position={Position.TOP}>
+                <Button icon='delete' intent='danger' minimal={true} onClick={() => {
+                  const result = inputData.propertyEvents.filter(event => event.id !== propertyEvent.id)
+                  setInputData(prevInputData => ({
+                    ...prevInputData,
+                    propertyEvents: result
+                  }))
+                }}/>
+              </Tooltip>
+            </div>
+          </div>
+        )
+      })
+    }
+
+    {/* Input fields for adding a new event */}
+    <div className="flex-sb mt20" style={{ alignItems: 'center' }}>
+      <p>New</p>
+      <hr className="divider" style={{ width: '90%' }} />
+    </div>
+    <div className="flex-sb mt10">
+      <div style={{ marginRight: '5px', width: '240px' }}>
+        <Popover autoFocus={false}>
+          <Button intent={Intent.PRIMARY} outlined={true} text={selectedDate} icon="timeline-events" />
+          <DatePicker className={Classes.ELEVATION_1} highlightCurrentDay={true} onChange={handleDateChange} />
+        </Popover>
+      </div>
+
+      <InputGroup 
+        style={{ flex: 'auto'}} 
+        fill={true}
+        value={inputData.propertyNewEventInfo} 
+        placeholder="New event info" 
+        name="propertyNewEventInfo" 
+        onChange={handleChange}
+      />
+
+      <div style={{ marginLeft: '15px' }}>
+        <Tooltip content="Add" position={Position.TOP}>
+          <Button icon='add' intent='primary' minimal={true} onClick={() => {
+            let newEvent = {date: selectedDate, info: inputData.propertyNewEventInfo, id: inputData.propertyEvents.length}
+            let newPropertyEvents = [...inputData.propertyEvents]
+            newPropertyEvents.push(newEvent)
+            setInputData(prevInputData => ({
+              ...prevInputData,
+              propertyEvents: newPropertyEvents,
+              propertyNewEventDate: '',
+              propertyNewEventInfo: ''
+            }))
+          }}/>
+        </Tooltip>
+      </div>
+    </div>
+  </>
+  }
+
   return (
     <div className="content">
 
@@ -255,197 +461,73 @@ function Property() {
             </div>
           </Drawer>
 
-          {/* ===ADDRESS=== */}
-          <Card interactive={true} elevation={Elevation.ZERO} className="mt20" onClick={() => {
-            if (!isEditing.address)
-              setIsEditing(prevState => ({...prevState, address: true}))
-          }}>
-            <div className="flex-sb">
-              <h1 className="heading">Location</h1>
-              <BlockControls add={false} edit={true} />
-            </div>
-            {
-              isEditing.address ?
-                <>
-                  <InputGroup   className="mt10" value={inputData.propertyStreet} name="propertyStreet" onChange={handleChange} />
-                  <div className="flex-sb">
-                    <InputGroup className="mt10" value={inputData.propertyCity}   name="propertyCity"   onChange={handleChange} />
-                    <InputGroup className="mt10" value={inputData.propertyState}  name="propertyState"  onChange={handleChange} />
-                    <InputGroup className="mt10" value={inputData.propertyZip}    name="propertyZip"    onChange={handleChange} />
-                  </div>
-                  <div className="flex-sb">
-                    <Button className="mt10" intent="success" icon="floppy-disk" text="Save" onClick={() => {
-                      // Verify form data
-                      // Set the edit var to false
-                      setIsEditing(prevInputData => ({...prevInputData, address: false}))
-                      // New reference
-                      var myDate = new Date()
-                      var timestamp = myDate.getTime()
-                      var newProperty = {
-                        ...property,
-                        street:     inputData.propertyStreet,
-                        city:       inputData.propertyCity,
-                        state:      inputData.propertyState,
-                        zip:        inputData.propertyZip,
-                        updatedOn:  timestamp
-                      }
-                      parseDate(timestamp)
-                      setProperty(newProperty)
-                    }}/>
-                    <Button className="mt10" intent="danger" icon="cross" text="Cancel" onClick={() => {setIsEditing(prevInputData => ({...prevInputData, address: false}))}} />
-                  </div>
-                </>
-              :
-                <>
-                  <p className="address">
-                    {property.street}<br />
-                    {`${property.city}, ${property.state} ${property.zip}`}<br />
-                  </p>
-                  <Button className="mt10" icon="map" text="View on map" />
-                </>
-            }
-          </Card>
+          {/* ADDRESS */}
+          <Display 
+            editingFlag={isEditing.address}
+            setIsEditing={setIsEditing}
+            editingProp={'address'}
+            property={property}
+            setProperty={setProperty}
+            parseDate={parseDate}
+            inputData={inputData}
+            displayRender={() => {
+              return <>
+                <p className="address">
+                  {property.street}<br />
+                  {`${property.city}, ${property.state} ${property.zip}`}<br />
+                </p>
+                <Button className="mt10" icon="map" text="View on map" />
+              </>
+            }}
+            editRender={() => {
+              return <>
+                <InputGroup   className="mt10" value={inputData.propertyStreet} name="propertyStreet" onChange={handleChange} />
+                <div className="flex-sb">
+                  <InputGroup className="mt10" value={inputData.propertyCity}   name="propertyCity"   onChange={handleChange} />
+                  <InputGroup className="mt10" value={inputData.propertyState}  name="propertyState"  onChange={handleChange} />
+                  <InputGroup className="mt10" value={inputData.propertyZip}    name="propertyZip"    onChange={handleChange} />
+                </div>
+            </>
+            }}
+            title='Location'
+          />
 
-          {/* ===UTILITIES=== */}
-          <Card interactive={true} elevation={Elevation.ZERO} className="mt20" onClick={() => {
-            if (!isEditing.utilities)
-              setIsEditing(prevState => ({...prevState, utilities: true}))
-          }}>
-            <div className="flex-sb">
-              <h1 className="heading">Utilities</h1>
-              <BlockControls add={false} edit={true} />
-            </div>
-            {
-              isEditing.utilities ?
-                <>
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <div style={{ width: '30px' }}>
-                      <i className="fas fa-plug" style={{ color: 'rgb(247, 194, 47)', paddingRight: '10px'}}></i>
-                    </div>
-                    <InputGroup value={inputData.propertyPower} fill={true} name="propertyPower" onChange={handleChange} />
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
-                    <div style={{ width: '30px' }}>
-                      <i className="fas fa-fire" style={{ color: 'rgb(247, 127, 47)', paddingRight: '10px'}}></i>
-                    </div>
-                    <InputGroup value={inputData.propertyGas} fill={true} name="propertyGas" onChange={handleChange} />
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
-                    <div style={{ width: '30px' }}>
-                      <i className="fas fa-faucet" style={{ color: 'rgb(47, 167, 247)', paddingRight: '10px'}}></i>
-                    </div>
-                    <InputGroup value={inputData.propertyWater} fill={true} name="propertyWater" onChange={handleChange} />
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
-                    <div style={{ width: '30px' }}>
-                      <i className="fas fa-toilet" style={{ color: '#BFCCD6', paddingRight: '10px'}}></i>
-                    </div>
-                    <InputGroup value={inputData.propertySewage} fill={true} name="propertySewage" onChange={handleChange} />
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
-                    <div style={{ width: '30px' }}>
-                      <i className="fas fa-trash-alt" style={{ color: '#8A9BA8', paddingRight: '10px'}}></i>
-                    </div>
-                    <InputGroup value={inputData.propertyWaste} fill={true} name="propertyWaste" onChange={handleChange} />
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
-                    <div style={{ width: '30px' }}>
-                      <i className="fas fa-wifi" style={{ color: '#00B3A4', paddingRight: '10px'}}></i>
-                    </div>
-                    <InputGroup value={inputData.propertyInternet} fill={true} name="propertyInternet" onChange={handleChange} />
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
-                    <div style={{ width: '30px' }}>
-                      <i className="fas fa-leaf" style={{ color: 'rgb(117, 247, 47)', paddingRight: '10px'}}></i>
-                    </div>
-                    <InputGroup value={inputData.propertyLawncare} fill={true} name="propertyLawncare" onChange={handleChange} />
-                  </div>
-                  <div className="flex-sb" style={{ marginTop: '20px' }}>
-                    <Button className="mt10" intent="success" icon="floppy-disk" text="Save" onClick={() => {
-                      // Verify form data
-                      // Set the edit var to false
-                      setIsEditing(prevInputData => ({...prevInputData, utilities: false}))
-                      // New reference
-                      var newUtilities = {
-                        power:    inputData.propertyPower,
-                        gas:      inputData.propertyGas,
-                        water:    inputData.propertyWater,
-                        sewage:   inputData.propertySewage,
-                        waste:    inputData.propertyWaste,
-                        internet: inputData.propertyInternet,
-                        lawncare: inputData.propertyLawncare
-                      }
+          {/* UTILITIES */}
+          <Display
+            editingFlag={isEditing.utilities}
+            setIsEditing={setIsEditing}
+            editingProp='utilities'
+            property={property}
+            setProperty={setProperty}
+            parseDate={parseDate}
+            inputData={inputData}
+            displayRender={jsxDispUtility()}
+            editRender={jsxEditUtility()}
+            mapping={[
+              {in: 'propertyPower',     out: 'utilities.power'},
+              {in: 'propertyGas',       out: 'utilities.gas'},
+              {in: 'propertyWater',     out: 'utilities.water'},
+              {in: 'propertySewage',    out: 'utilities.sewage'},
+              {in: 'propertyWaste',     out: 'utilities.waste'},
+              {in: 'propertyInternet',  out: 'utilities.internet'},
+              {in: 'propertyLawncare',  out: 'utilities.lawncare'},
+            ]}
+            title='Utilities'
+          />
 
-                      var myDate = new Date()
-                      var timestamp = myDate.getTime()
-
-                      var newProperty = {
-                        ...property,
-                        utilities: {...newUtilities},
-                        updatedOn: timestamp
-                      }
-                      setProperty(newProperty)
-                    }}/>
-                    <Button className="mt10" intent="danger" icon="cross" text="Cancel" onClick={() => {setIsEditing(prevInputData => ({...prevInputData, utilities: false}))}} />
-                  </div>
-                </>
-              :
-                <>
-                  {
-                    // Need a way to check for empty objects
-                    property.utilities ?
-                      <HTMLTable className="width100" bordered={false} striped={false} condensed={true}>
-                        <thead>
-                          <tr>
-                            <th>Type</th>
-                            <th></th>
-                            <th>Provider</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>Power</td>
-                            <td><i className="fas fa-plug"      style={{ color: 'rgb(247, 194, 47)' }}></i></td>
-                            <td><i>{property.utilities.power}</i></td>
-                          </tr>
-                          <tr>
-                            <td>Gas</td>
-                            <td><i className="fas fa-fire"      style={{ color: 'rgb(247, 127, 47)' }}></i></td>
-                            <td><i>{property.utilities.gas}</i></td>
-                          </tr>
-                          <tr>
-                            <td>Water</td>
-                            <td><i className="fas fa-faucet"    style={{ color: 'rgb(47, 167, 247)' }}></i></td>
-                            <td><i>{property.utilities.water}</i></td>
-                          </tr>
-                          <tr>
-                            <td>Sewage</td>
-                            <td><i className="fas fa-toilet"    style={{ color: '#BFCCD6' }}></i></td>
-                            <td><i>{property.utilities.sewage}</i></td>
-                          </tr>
-                          <tr>
-                            <td>Waste</td>
-                            <td><i className="fas fa-trash-alt" style={{ color: '#8A9BA8' }}></i></td>
-                            <td><i>{property.utilities.waste}</i></td>
-                          </tr>
-                          <tr>
-                            <td>Internet</td>
-                            <td><i className="fas fa-wifi"      style={{ color: '#00B3A4' }}></i></td>
-                            <td><i>{property.utilities.internet}</i></td>
-                          </tr>
-                          <tr>
-                            <td>Lawncare</td>
-                            <td><i className="fas fa-leaf"      style={{ color: 'rgb(117, 247, 47)' }}></i></td>
-                            <td><i>{property.utilities.lawncare}</i></td>
-                          </tr>
-                        </tbody>
-                      </HTMLTable>
-                    :
-                      <>No utilities information</>
-                    }
-                </>
-            }
-          </Card>
+          {/* EVENTS */}
+          <Display
+            editingFlag={isEditing.events}
+            setIsEditing={setIsEditing}
+            editingProp='events'
+            property={property}
+            setProperty={setProperty}
+            parseDate={parseDate}
+            inputData={inputData}
+            displayRender={jsxDispEvents()}
+            editRender={jsxEditEvents()}
+            title='Events'
+          />
 
           {/* ===EVENTS=== */}
           <Card interactive={true} elevation={Elevation.ZERO} className="mt20" onClick={() => {

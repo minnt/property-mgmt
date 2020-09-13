@@ -78,7 +78,7 @@ function ViewAll() {
   }, [selectedTab, properties])
 
   // Reload property data
-  function reload() {
+  const reload = () => {
     setIsLoading(true)
     axios.get('http://localhost:5000/residential/')
       .then(res => {
@@ -89,12 +89,12 @@ function ViewAll() {
       .catch(err => console.log(err))
   }
 
-  function handleChange(event) {
+  const handleChange = (event) => {
     const {name, value} = event.target
     setInputData(prevInputData => ({...prevInputData, [name]: value}))
   }
 
-  function handleTabChange(event) {
+  const handleTabChange = (event) => {
     switch (event) {
       case 'all':
         setSelectedTab('all')
