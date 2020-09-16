@@ -12,12 +12,11 @@
   --accent2: rgba(150, 156, 187, 0.06);
 }
 
-.path {
-  /* fill: rgba(180, 180, 180, 0.3); */
-  fill: none;
-  stroke: #00a3e0;
-  stroke-miterlimit: 10;
-  stroke-width: 3px;
+.test {
+  width: 100px;
+  height: 100px;
+  border-radius: 4px;
+  background-color: #e4002b;
 }
 
 .lightmode {

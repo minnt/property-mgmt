@@ -1,5 +1,6 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useContext } from 'react'
 import { Switch, Route } from 'react-router-dom'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import { Context } from './Context'
 
@@ -21,12 +22,20 @@ function App() {
   const {isDarkMode, toggleDarkMode} = useContext(Context)
 
   // Dark mode key event (Shift+D)
-  useEffect(() => {
-    document.addEventListener('keydown', function(e){
-      if (e.shiftKey && e.key === 'D')
-        toggleDarkMode()
-    })
-  }, [toggleDarkMode])
+  // useEffect(() => {
+  //   document.addEventListener('keydown', function(e){
+  //     if (e.shiftKey && e.key === 'D')
+  //       toggleDarkMode()
+  //   })
+  //   return () => {
+  //     document.removeEventListener('keydown', function(e){
+  //       if (e.shiftKey && e.key === 'D')
+  //         toggleDarkMode()
+  //     })
+  //   }
+  // }, [toggleDarkMode])
+
+  useHotkeys('shift+d', () => toggleDarkMode())
 
   return (
     <div className={isDarkMode ? 'bp3-dark fullpage-container darkmode' : 'fullpage-container lightmode'}>

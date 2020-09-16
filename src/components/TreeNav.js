@@ -12,6 +12,10 @@ function TreeNav() {
   let nodesData = generateMenu(propertiesData)
 
   useEffect(() => {
+
+  }, [])
+
+  useEffect(() => {
     setNodes(generateMenu(propertiesData))
     console.log('UPDATE! Properties data has updated, updating tree')
   }, [propertiesData])
