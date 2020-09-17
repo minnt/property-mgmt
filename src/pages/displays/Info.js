@@ -11,6 +11,10 @@ const Info = ({ property, setProperty }) => {
   const [photos,        setPhotos]       = useState([])
   const [coverPhoto,    setCoverPhoto]   = useState('')
 
+  useEffect(() => {
+    setCoverPhoto(property.coverPhoto)
+  }, [property.coverPhoto])
+
   const handleTextChange = (event) => setSqftText(event)
 
   const handleTextConfirm = (event) => {
@@ -18,21 +22,19 @@ const Info = ({ property, setProperty }) => {
     console.log('Editable text has been confirmed')
   }
 
-  useEffect(() => {
-    setCoverPhoto(property.coverPhoto)
-  }, [property.coverPhoto])
+  const openDrawer = () => {
+    setIsDrawerOpen(true)
+    axios.get('http://localhost:5000/photos/')
+      .then(res => setPhotos(res.data))
+      .catch(err => console.log(err))
+  }
 
   return (
     <>
       <div className="aside" style={{marginTop: '20px'}}>
         <div className="info-pane">
 
-          <img src={coverPhoto} className="info-img pointer" alt="" onClick={() => {
-            setIsDrawerOpen(true)
-            axios.get('http://localhost:5000/photos/')
-              .then(res => setPhotos(res.data))
-              .catch(err => console.log(err))
-          }}/>
+          <img src={coverPhoto} className="info-img pointer" alt="" style={{ width: '100%' }} onClick={() => openDrawer()} />
 
           <div className="info-inner">
 

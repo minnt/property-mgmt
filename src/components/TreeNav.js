@@ -1,19 +1,14 @@
-import React, {useState, useContext, useEffect} from 'react'
-import {Link} from 'react-router-dom'
+import React, { useState, useContext, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { Tree } from "@blueprintjs/core"
 
-import {Tree} from "@blueprintjs/core"
-
-import {Context} from '../Context'
+import { Context } from '../Context'
 
 function TreeNav() {
 
   const {propertiesData} = useContext(Context)
 
   let nodesData = generateMenu(propertiesData)
-
-  useEffect(() => {
-
-  }, [])
 
   useEffect(() => {
     setNodes(generateMenu(propertiesData))
@@ -25,9 +20,9 @@ function TreeNav() {
 
   const handleNodeClick = (nodeData, _nodePath, e) => {
     const originallySelected = nodeData.isSelected
-    if (!e.shiftKey) {
+    if (!e.shiftKey)
       forEachNode(nodes, n => (n.isSelected = false))
-    }
+
     nodeData.isSelected = originallySelected == null ? true : !originallySelected
 
     const newState = [...nodes]
@@ -52,9 +47,7 @@ function TreeNav() {
   }
 
   function forEachNode(nodes, callback) {
-    if (nodes == null) {
-      return
-    }
+    if (nodes == null) return
 
     for (const node of nodes) {
       callback(node)
@@ -168,7 +161,7 @@ function TreeNav() {
     })
 
     // To disable a node, example:
-    // treeNodes[2].disabled = true
+    treeNodes[1].disabled = true
 
     console.log('Tree nav updated')
     return treeNodes

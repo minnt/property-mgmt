@@ -12,13 +12,17 @@
     "animejs": "^3.2.0",
     "axios": "^0.19.2",
     "chart.js": "^2.9.3",
+    "classnames": "^2.2.6",
     "framer-motion": "^2.4.3-beta.2",
+    "primeicons": "^4.0.0",
+    "primereact": "^5.0.0-rc.2",
     "react": "^16.13.1",
     "react-chartjs-2": "^2.9.0",
     "react-dom": "^16.13.1",
     "react-hotkeys-hook": "^2.3.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
+    "react-transition-group": "^4.4.1",
     "uuid": "^8.3.0"
   },
   "scripts": {

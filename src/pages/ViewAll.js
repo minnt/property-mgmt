@@ -1,12 +1,14 @@
-import React, {useState, useEffect, useContext} from 'react'
-import {Link, useParams} from 'react-router-dom'
+import React, { useState, useEffect, useContext } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import axios from 'axios'
-import {HTMLTable, InputGroup, Button, Tag, Tab, Tabs, Dialog, Alert, Intent, Callout, HTMLSelect, Spinner} from "@blueprintjs/core"
-import {AppToaster} from "../utils/toaster"
+import { HTMLTable, Button, Tag, Alert, Intent, Callout, Spinner } from "@blueprintjs/core"
+import { AppToaster } from '../utils/toaster'
 
-import {Context} from '../Context'
+import { Context } from '../Context'
 
-// Component to render a list of properties
+import AddDialog from '../components/list/AddDialog'
+import Tabs from '../components/list/VertTabs'
+
 function ViewAll() {
 
   let   {filter}                              = useParams()
@@ -21,15 +23,7 @@ function ViewAll() {
   const [isDialogOpen,    setIsDialogOpen]    = useState(false)
   const [isAlertOpen,     setIsAlertOpen]     = useState(false)
   const [isLoading,       setIsLoading]       = useState(true)
-  const [inputData,       setInputData]       = useState({
-    propertyName: "", 
-    propertyNoOfUnits: 0, 
-    propertyStreet: "",
-    propertyCity: "", 
-    propertyState: "", 
-    propertyZip: "",
-    propertyType: ""
-  })
+
 
   // Load properties data from DB
   useEffect(() => {
@@ -77,7 +71,6 @@ function ViewAll() {
     }
   }, [selectedTab, properties])
 
-  // Reload property data
   const reload = () => {
     setIsLoading(true)
     axios.get('http://localhost:5000/residential/')
@@ -87,32 +80,6 @@ function ViewAll() {
         setIsLoading(false)
       })
       .catch(err => console.log(err))
-  }
-
-  const handleChange = (event) => {
-    const {name, value} = event.target
-    setInputData(prevInputData => ({...prevInputData, [name]: value}))
-  }
-
-  const handleTabChange = (event) => {
-    switch (event) {
-      case 'all':
-        setSelectedTab('all')
-        break
-      case 'res':
-        setSelectedTab('res')
-        break
-      case 'com':
-        setSelectedTab('com')
-        break
-      default:
-        console.log('No tab selected')
-    }
-  }
-
-  const handleSelectChange = (event) => {
-    let value = event.currentTarget.value
-    setInputData(prevInputData => ({...prevInputData, propertyType: value}))
   }
 
   const showToast = (msg, int) => {
@@ -141,59 +108,7 @@ function ViewAll() {
 
       <hr className="divider" />
 
-      {/* Dialog to add a new property and the accompanying info */}
-      <Dialog 
-        isOpen={isDialogOpen}
-        className={isDarkMode ? 'bp3-dark' : ''}
-        canEscapeKeyClose={true} 
-        canOutsideClickClose={true}
-        isCloseButtonShown={true} 
-        title="Add a new property" 
-        onClose={() => {setIsDialogOpen(false)}}
-        icon="plus"
-      >
-        <div className="dialog mt20">
-          <InputGroup type="text" value={inputData.propertyName} name="propertyName" placeholder="Name of property" onChange={handleChange}/>
-          <hr style={{ width: '100%'}}/>
-          <InputGroup type="text" value={inputData.propertyStreet} name="propertyStreet" placeholder="Street Address" onChange={handleChange}/>
-          <div className="flex-sb">
-            <div style={{ marginRight: '10px' }}>
-              <InputGroup type="text" placeholder="City"      name="propertyCity"   value={inputData.propertyCity}  onChange={handleChange} />
-            </div>
-            <div style={{ marginRight: '10px' }}>
-              <InputGroup type="text" placeholder="State"     name="propertyState"  value={inputData.propertyState} onChange={handleChange} />
-            </div>
-            <div>
-              <InputGroup type="text" placeholder="ZIP Code"  name="propertyZip"    value={inputData.propertyZip}   onChange={handleChange} />
-            </div>
-          </div>
-          <HTMLSelect onChange={handleSelectChange} disabled={false} className="width50">
-            <option>Residential</option>
-            <option>Commercial</option>
-          </HTMLSelect>
-          <Callout icon="info-sign">More detailed information can be entered on the overview page for this property, after creation.</Callout>
-          <div>
-            <Button icon="floppy-disk" text="Save" intent="success" onClick={() => {
-              var newProperty = {
-                name:   inputData.propertyName,
-                street: inputData.propertyStreet,
-                city:   inputData.propertyCity,
-                state:  inputData.propertyState,
-                zip:    inputData.propertyZip,
-                // type:   inputData.propertyType
-              }
-              axios.post('http://localhost:5000/residential/add', newProperty)
-                .then(res => {
-                  // setDispProperties(prevDispProperties => ({...prevDispProperties, newProperty}))
-                  setIsDialogOpen(false)
-                  showToast("Property added", "success")
-                  reload()
-                })
-                .catch(err => console.log(err))
-            }}/>
-          </div>
-        </div>
-      </Dialog>
+      <AddDialog setIsDialogOpen={setIsDialogOpen} isDialogOpen={isDialogOpen} showToast={showToast} reload={reload} isDarkMode={isDarkMode} />
 
       {/* Alert to confirm the deletion of a property */}
       <Alert
@@ -214,65 +129,59 @@ function ViewAll() {
       </Alert>
 
       {
-        isLoading ?
-          <div className="spinner">
+        isLoading
+          ? <div className="spinner">
             <Spinner size={Spinner.SIZE_LARGE} />
           </div>
-        :
-      <div className="flex-sb">
 
-        <div className="flex-col-sb" style={{height: '200px', marginRight: '20px'}}>
-          <Tabs animate={true} id="navbar" vertical={true} large={false} onChange={handleTabChange} selectedTabId={selectedTab}>
-            <Tab id="all" title="All" />
-            <Tab id="com" title="Commercial" />
-            <Tab id="res" title="Residential" />
-          </Tabs>
-          <Button intent="success" icon="plus" onClick={() => setIsDialogOpen(true)}>Add</Button>
-        </div>
+          : <div className="flex-sb">
 
-        {
-          dispProperties.length > 0 ?
-            <HTMLTable className="width100" bordered={true} striped={true} condensed={true}>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Type</th>
-                  <th># of Units</th>
-                  <th>City</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  dispProperties.map(property => {
-                    return (
-                      <tr key={property._id}>
-                        <td><Link to={`/property/${property._id}`}>{property.name}</Link></td>
-                        <td><Tag intent={property.type === "Residential" ? 'primary' : ''}>{property.type}</Tag></td>
-                        <td>{property.units.length}</td>
-                        <td>{property.city}</td>
-                        <td>
-                          <Button intent="danger" icon="trash" minimal={true} small={true} onClick={() => {
-                            setActiveProperty(property)
-                            setIsAlertOpen(true)
-                          }}>
-                            Delete
-                          </Button>
-                        </td>
+            <Tabs setIsDialogOpen={setIsDialogOpen} selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
+
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+              {
+                dispProperties.length > 0
+                  ? <HTMLTable bordered={true} striped={true} condensed={true} style={{ width: '60%' }}>
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th># of Units</th>
+                        <th>City</th>
+                        <th>Actions</th>
                       </tr>
-                    )
-                  })
-                }
-              </tbody>
-            </HTMLTable>
-          :
-            <div style={{width: '100%'}}>
-              <Callout title="No properties" style={{width: '500px', margin: 'auto'}}>New properties can be registered using the [Add] button.</Callout>
+                    </thead>
+                    <tbody>
+                      {
+                        dispProperties.map(property => {
+                          return (
+                            <tr key={property._id}>
+                              <td><Link to={`/property/${property._id}`}>{property.name}</Link></td>
+                              <td><Tag intent={property.type === "Residential" ? 'primary' : ''}>{property.type}</Tag></td>
+                              <td>{property.units.length}</td>
+                              <td>{property.city}</td>
+                              <td>
+                                <Button intent="danger" icon="trash" minimal={true} small={true} onClick={() => {
+                                  setActiveProperty(property)
+                                  setIsAlertOpen(true)
+                                }}>
+                                  Delete
+                                </Button>
+                              </td>
+                            </tr>
+                          )
+                        })
+                      }
+                    </tbody>
+                  </HTMLTable>
+
+                  : <div style={{ width: '100%' }}>
+                    <Callout title="No properties" style={{width: '500px', margin: 'auto'}}>New properties can be registered using the [Add] button.</Callout>
+                  </div>
+              }
             </div>
-        }
-
-      </div>}
-
+          </div>
+      }
     </div>
   )
 }

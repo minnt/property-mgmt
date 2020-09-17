@@ -1,6 +1,7 @@
 import React, { useState, useRef, useLayoutEffect, useEffect, useContext } from 'react'
 import { useParams } from 'react-router-dom'
 import { Button, Spinner } from '@blueprintjs/core'
+import { Card } from 'primereact/card'
 import axios from 'axios'
 import { motion } from 'framer-motion'
 
@@ -8,7 +9,7 @@ import { Context } from '../Context'
 import { AppToaster } from '../utils/toaster'
 import { months, days } from '../utils/monthsDays'
 
-// Display
+// Displays
 import Info       from './displays/Info'
 import Events     from './displays/Events'
 import Utilities  from './displays/Utilities'
@@ -48,14 +49,16 @@ function Property() {
   }, [propertyId])
 
   // If the local property data has changed then update the DB, do not fire on first render
-  const firstUpdate = useRef(true)
+  const isFirstUpdate = useRef(true)
   useLayoutEffect(() => {
-    if (firstUpdate.current) {
-      firstUpdate.current = false
+    if (isFirstUpdate.current) {
+      isFirstUpdate.current = false
       return
     }
+
     axios.post(`http://localhost:5000/residential/update/${property._id}`, property) // Does this need fixed?
       .then(res => console.log(res.data))
+      
     console.log('New property data submitted to DB')
     showToast('Changes saved', 'success')
   }, [property])
@@ -120,11 +123,15 @@ function Property() {
                 <Events     property={property} setProperty={setProperty} />
                 <Notes      property={property} setProperty={setProperty} />
                 <Stats />
+                <Card title="Title" subTitle="SubTitle">
+                  Content AAAAAAAAAAAAAAAAA
+                </Card>
               </motion.div>
 
               <motion.div variants={containerVariants} initial='hidden' animate='visible'>
                 <motion.div variants={displayVariants} initial='hidden' animate='visible'/>
               </motion.div>
+
 
               <Info property={property} setProperty={setProperty} />
             </div>

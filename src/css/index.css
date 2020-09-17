@@ -6,25 +6,30 @@
 
 :root {
   --color-dark: hsl(205, 23%, 16%);
+  /* --color-dark: rgba(0, 0, 0, 0.8); */
   --color-light: rgb(240, 240, 240);
 
   --accent: rgba(150, 156, 187, 0.10);
   --accent2: rgba(150, 156, 187, 0.06);
 }
 
-.test {
-  width: 100px;
-  height: 100px;
-  border-radius: 4px;
-  background-color: #e4002b;
-}
-
 .lightmode {
-  background-color: var(--color-light);
+  /* background-color: var(--color-light); */
+  background: radial-gradient(ellipse at bottom, #e0e0e0 0%, #eff1fc 100%);
+  /* background-image: linear-gradient(306deg, rgb(68, 144, 190),rgb(251, 254, 241)); */
+  /* background-image: linear-gradient(0deg, rgb(94, 5, 4),rgb(253, 19, 61)); */
 }
 
 .darkmode {
-  background-color: var(--color-dark);
+  /* background-color: var(--color-dark); */
+  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+  /* background-image: linear-gradient(90deg, rgb(62, 25, 113),rgb(72, 105, 206)); */
+  /* background-image: linear-gradient(0deg, rgb(47, 76, 234),rgb(39, 101, 247),rgb(56, 50, 221),rgb(64, 25, 208)); */
+  /* background-image: linear-gradient(0deg, rgb(31,52,163),rgb(22,63,159),rgb(31,27,140),rgb(42,14,147)); */
+  /* background-image: radial-gradient(circle at center center, rgb(127, 62, 211),rgb(0, 23, 70)); */
+  /* background: linear-gradient(to right, rgba(47,0,158,1) 0%, rgba(29,2,56,1) 100%); */
+  /* background: linear-gradient(180deg, rgba(10,5,97,1) 0%, rgba(9,9,121,1) 35%, rgba(24,9,181,1) 100%); */
+  /* background: linear-gradient(180deg, rgba(10,7,71,1) 0%, rgba(7,7,96,1) 35%, rgba(18,8,139,1) 100%); */
 }
 
 body {
@@ -275,6 +280,14 @@ body {
   text-decoration: none !important;
 }
 
+/* .bp3-card {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+}
+
+.bp3-navbar {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+} */
+
 .inherit-color {
   color: inherit !important;
 }
@@ -309,16 +322,4 @@ body {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(150, 156, 187, 0.20);
-}
-
-.img-text-container {
-  position: relative;
-  text-align: center;
-}
-
-.img-bottom-text {
-  position: absolute;
-  top: 80%;
-  left: 50%;
-  transform: translate(-50%);
 }

@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react'
-import { Card, Button, HTMLTable, Elevation, InputGroup } from '@blueprintjs/core'
+import { Button, HTMLTable, Elevation, InputGroup } from '@blueprintjs/core'
+import { Card } from 'primereact/card'
 import { motion } from 'framer-motion'
 
 import { Context } from '../../Context'

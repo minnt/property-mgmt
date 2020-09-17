@@ -8,6 +8,10 @@ import "@blueprintjs/icons/lib/css/blueprint-icons.css"
 import "@blueprintjs/datetime/lib/css/blueprint-datetime.css"
 import "normalize.css/normalize.css"
 
+import 'primereact/resources/themes/saga-blue/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
+
 import App from './App'
 import {ContextProvider} from './Context'
 
